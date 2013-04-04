@@ -1,0 +1,6 @@
+{application, intrin,
+ [{description, "GCC SIMD operations"},
+  {vsn, "0.1"},
+  {env, []},
+  {applications,[kernel,stdlib]}
+  ]}.

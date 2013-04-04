@@ -1,0 +1,2 @@
+gcc -x c++ -E intrin_erl_template | sed 's/^#.*//g' > intrin.erl
+

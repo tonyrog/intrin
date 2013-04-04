@@ -1,0 +1,87 @@
+%%% @author Tony Rogvall <tony@rogvall.se>
+%%% @copyright (C) 2013, Tony Rogvall
+%%% @doc
+%%%    simd instruction interface
+%%% @end
+%%% Created : 4 Apr 2013 by Tony Rogvall <tony@rogvall.se>
+
+-module(intrin).
+
+-on_load(init/0).
+
+#define DEF_void_MMd_MMs(pfx,nm) \
+-export([nm/2]).
+#define DEF_void_MMd(pfx,nm) \
+-export([nm/1]).
+#define DEF_bool_MMd_MMs(pfx,nm) \
+-export([nm/2]).
+#define DEF_void_MMd_imm8(pfx,nm) \
+-export([nm/2]).
+#define DEF_void_XMMd_XMMs1(pfx,nm) \
+-export([nm/2]).
+#define DEF_void_XMMd_XMMs(pfx,nm) \
+-export([nm/2]).
+#define DEF_void_XMMd(pfx,nm) \
+-export([nm/1]).
+#define DEF_bool_XMMd_XMMs(pfx,nm) \
+-export([nm/2]).
+#define DEF_void_XMMd_imm8(pfx,nm) \
+-export([nm/2]).
+
+#include "mmx.inc"
+#include "sse.inc"
+#include "sse2.inc"
+#include "sse3.inc"
+#include "sse4.1.inc"
+
+-export([mm_move/2]).
+-export([mm_set/2]).
+-export([mm_get/1]).
+-export([mm_load/3]).
+-export([info/1]).
+
+#undef DEF_void_XMMd_XMMs1
+#undef DEF_void_XMMd_XMMs
+#undef DEF_void_XMMd
+#undef DEF_bool_XMMd_XMMs
+#undef DEF_void_XMMd_imm8
+#undef DEF_void_MMd_MMs
+#undef DEF_void_MMd
+#undef DEF_bool_MMd_MMs
+#undef DEF_void_MMd_imm8
+
+init() ->
+    Nif = filename:join([code:priv_dir(intrin),"intrin_nif"]),
+    erlang:load_nif(Nif, 0).
+
+#define DEF_void_XMMd_XMMs1(pfx,nm) \
+nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
+#define DEF_void_XMMd_XMMs(pfx,nm) \
+nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
+#define DEF_bool_XMMd_XMMs(pfx,nm) \
+nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
+#define DEF_void_XMMd_imm8(pfx,nm) \
+nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
+#define DEF_void_XMMd(pfx,nm) \
+nm(_Dst) -> erlang:error(nif_not_loaded).
+
+#define DEF_void_MMd_MMs(pfx,nm) \
+nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
+#define DEF_bool_MMd_MMs(pfx,nm) \
+nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
+#define DEF_void_MMd_imm8(pfx,nm) \
+nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
+#define DEF_void_MMd(pfx,nm) \
+nm(_Dst) -> erlang:error(nif_not_loaded).
+
+#include "mmx.inc"
+#include "sse.inc"
+#include "sse2.inc"
+#include "sse3.inc"
+#include "sse4.1.inc"
+
+mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_set(_Dst,_Data) -> erlang:error(nif_not_loaded).
+mm_load(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
+mm_get(_Src) -> erlang:error(nif_not_loaded).
+info(_Info) ->  erlang:error(nif_not_loaded).
