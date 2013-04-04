@@ -27,6 +27,8 @@
 -export([nm/2]).
 #define DEF_void_XMMd_imm8(pfx,nm) \
 -export([nm/2]).
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm) \
+-export([nm/3]).
 
 #include "mmx.inc"
 #include "sse.inc"
@@ -45,6 +47,7 @@
 #undef DEF_void_XMMd
 #undef DEF_bool_XMMd_XMMs
 #undef DEF_void_XMMd_imm8
+#undef DEF_void_XMMd_XMMs_imm8
 #undef DEF_void_MMd_MMs
 #undef DEF_void_MMd
 #undef DEF_bool_MMd_MMs
@@ -62,6 +65,8 @@ nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
 #define DEF_void_XMMd_imm8(pfx,nm) \
 nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm) \
+nm(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
 #define DEF_void_XMMd(pfx,nm) \
 nm(_Dst) -> erlang:error(nif_not_loaded).
 

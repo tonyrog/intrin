@@ -405,6 +405,19 @@ static ERL_NIF_TERM nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
     return ATOM(ok);							\
 }
 
+
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm)					\
+static ERL_NIF_TERM nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    uint8_t val;							\
+    int src,dst;							\
+    if (!get_xmm(env, argv[0], &dst)) return enif_make_badarg(env);	\
+    if (!get_xmm(env, argv[1], &src)) return enif_make_badarg(env);	\
+    if (!get_imm8(env, argv[2], &val)) return enif_make_badarg(env);	\
+    xmm[dst] = pfx##nm(xmm[src], val);					\
+    return ATOM(ok);							\
+}
+
 #else
 
 #define DEF_void_XMMd_XMMs1(pfx,nm) NOT_SUPPORTED(nm)
@@ -412,6 +425,7 @@ static ERL_NIF_TERM nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 #define DEF_void_XMMd(pfx,nm)      NOT_SUPPORTED(nm)
 #define DEF_bool_XMMd_XMMs(pfx,nm) NOT_SUPPORTED(nm)
 #define DEF_void_XMMd_imm8(pfx,nm) NOT_SUPPORTED(nm)
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm) NOT_SUPPORTED(nm)
 
 #endif
 
@@ -535,6 +549,7 @@ static ERL_NIF_TERM mm_load(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 #undef DEF_void_XMMd
 #undef DEF_bool_XMMd_XMMs
 #undef DEF_void_XMMd_imm8
+#undef DEF_void_XMMd_XMMs_imm8
 #undef DEF_void_MMd_MMs
 #undef DEF_void_MMd
 #undef DEF_bool_MMd_MMs
@@ -545,6 +560,7 @@ static ERL_NIF_TERM mm_load(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 #define DEF_void_XMMd(pfx,nm)      { #nm, 1, nm },
 #define DEF_bool_XMMd_XMMs(pfx,nm) { #nm, 2, nm },
 #define DEF_void_XMMd_imm8(pfx,nm) { #nm, 2, nm },
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm) { #nm, 3, nm },
 #define DEF_void_MMd_MMs(pfx,nm)   { #nm, 2, nm },
 #define DEF_void_MMd(pfx,nm)       { #nm, 1, nm },
 #define DEF_bool_MMd_MMs(pfx,nm)   { #nm, 2, nm },

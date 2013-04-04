@@ -269,9 +269,9 @@
 -export([mm_min_epu8/2]).
 
 -export([mm_mulhi_epu16/2]).
--export([mm_shufflehi_epi16/2]).
--export([mm_shufflelo_epi16/2]).
--export([mm_shuffle_epi32/2]).
+-export([mm_shufflehi_epi16/3]).
+-export([mm_shufflelo_epi16/3]).
+-export([mm_shuffle_epi32/3]).
 
 -export([mm_avg_epu8/2]).
 -export([mm_avg_epu16/2]).
@@ -591,9 +591,9 @@ mm_min_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_min_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
 
 mm_mulhi_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_shufflehi_epi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_shufflelo_epi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_shuffle_epi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
+mm_shufflehi_epi16(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
+mm_shufflelo_epi16(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
+mm_shuffle_epi32(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
 
 mm_avg_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_avg_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
