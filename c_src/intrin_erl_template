@@ -9,31 +9,32 @@
 
 -on_load(init/0).
 
-#define DEF_void_MMd_MMs(pfx,nm) \
+#define DEF_void_MMd_MMs(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_MMd(pfx,nm) \
+#define DEF_void_MMd(pfx,nm,dt) \
 -export([nm/1]).
-#define DEF_bool_MMd_MMs(pfx,nm) \
+#define DEF_bool_MMd_MMs(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_MMd_imm8(pfx,nm) \
+#define DEF_void_MMd_imm8(pfx,nm,dt,vt) \
 -export([nm/2]).
-#define DEF_void_XMMd_XMMs1(pfx,nm) \
+#define DEF_void_XMMd_XMMs1(pfx,nm,st) \
 -export([nm/2]).
-#define DEF_void_XMMd_XMMs(pfx,nm) \
+#define DEF_void_XMMd_XMMs(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_XMMd(pfx,nm) \
+#define DEF_void_XMMd(pfx,nm,dt) \
 -export([nm/1]).
-#define DEF_bool_XMMd_XMMs(pfx,nm) \
+#define DEF_bool_XMMd_XMMs(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_XMMd_imm8(pfx,nm) \
+#define DEF_void_XMMd_imm8(pfx,nm,dt,vt) \
 -export([nm/2]).
-#define DEF_void_XMMd_XMMs_imm8(pfx,nm) \
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm,dt,st,vt) \
 -export([nm/3]).
 
 #include "mmx.inc"
 #include "sse.inc"
 #include "sse2.inc"
 #include "sse3.inc"
+#include "ssse3.inc"
 #include "sse4.1.inc"
 
 -export([mm_move/2]).
@@ -57,32 +58,33 @@ init() ->
     Nif = filename:join([code:priv_dir(intrin),"intrin_nif"]),
     erlang:load_nif(Nif, 0).
 
-#define DEF_void_XMMd_XMMs1(pfx,nm) \
+#define DEF_void_XMMd_XMMs1(pfx,nm,dt) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd_XMMs(pfx,nm) \
+#define DEF_void_XMMd_XMMs(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_bool_XMMd_XMMs(pfx,nm) \
+#define DEF_bool_XMMd_XMMs(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd_imm8(pfx,nm) \
+#define DEF_void_XMMd_imm8(pfx,nm,dt,vt) \
 nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd_XMMs_imm8(pfx,nm) \
+#define DEF_void_XMMd_XMMs_imm8(pfx,nm,dt,st,vt) \
 nm(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd(pfx,nm) \
+#define DEF_void_XMMd(pfx,nm,dt) \
 nm(_Dst) -> erlang:error(nif_not_loaded).
 
-#define DEF_void_MMd_MMs(pfx,nm) \
+#define DEF_void_MMd_MMs(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_bool_MMd_MMs(pfx,nm) \
+#define DEF_bool_MMd_MMs(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_void_MMd_imm8(pfx,nm) \
+#define DEF_void_MMd_imm8(pfx,nm,dt,vt) \
 nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-#define DEF_void_MMd(pfx,nm) \
+#define DEF_void_MMd(pfx,nm,dt) \
 nm(_Dst) -> erlang:error(nif_not_loaded).
 
 #include "mmx.inc"
 #include "sse.inc"
 #include "sse2.inc"
 #include "sse3.inc"
+#include "ssse3.inc"
 #include "sse4.1.inc"
 
 mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).

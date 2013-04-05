@@ -1,7 +1,6 @@
 
 
 
-
 %%% @author Tony Rogvall <tony@rogvall.se>
 %%% @copyright (C) 2013, Tony Rogvall
 %%% @doc
@@ -278,6 +277,20 @@
 -export([mm_sad_epu8/2]).
 
 
+
+
+
+-export([mm_addsub_ps/2]).
+-export([mm_hadd_ps/2]).
+-export([mm_hsub_ps/2]).
+
+
+-export([mm_addsub_pd/2]).
+-export([mm_hadd_pd/2]).
+-export([mm_hsub_pd/2]).
+
+
+
 -export([mm_hadd_epi16/2]).
 -export([mm_hadd_epi32/2]).
 -export([mm_hadds_epi16/2]).
@@ -304,9 +317,9 @@
 
 
 
--export([mm_abs_epi8/1]).
--export([mm_abs_epi16/1]).
--export([mm_abs_epi32/1]).
+-export([mm_abs_epi8/2]).
+-export([mm_abs_epi16/2]).
+-export([mm_abs_epi32/2]).
 
 
 
@@ -600,6 +613,20 @@ mm_avg_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_sad_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
 
 
+
+
+
+mm_addsub_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_hadd_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_hsub_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
+
+
+mm_addsub_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_hadd_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_hsub_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
+
+
+
 mm_hadd_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_hadd_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_hadds_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
@@ -626,9 +653,9 @@ mm_sign_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
 
 
 
-mm_abs_epi8(_Dst) -> erlang:error(nif_not_loaded).
-mm_abs_epi16(_Dst) -> erlang:error(nif_not_loaded).
-mm_abs_epi32(_Dst) -> erlang:error(nif_not_loaded).
+mm_abs_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_abs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_abs_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
 
 
 
