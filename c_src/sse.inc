@@ -8,6 +8,8 @@ DEF_void_XMMd_XMMs1(_,mm_rcp_ss, __m128)
 DEF_void_XMMd_XMMs1(_,mm_rsqrt_ss, __m128)
 DEF_void_XMMd_XMMs(_,mm_min_ss, __m128, __m128)
 DEF_void_XMMd_XMMs(_,mm_max_ss, __m128, __m128)
+// i386_i:disassemble(0, [{0,AddPs}]).
+// AddPs = <<16#0f,16#58,2#11:2,Dst:3,Src:3>>
 DEF_void_XMMd_XMMs(_,mm_add_ps, __m128, __m128)
 DEF_void_XMMd_XMMs(_,mm_sub_ps, __m128, __m128)
 DEF_void_XMMd_XMMs(_,mm_mul_ps, __m128, __m128)

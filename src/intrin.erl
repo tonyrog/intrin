@@ -1,6 +1,10 @@
 
 
 
+
+
+
+
 %%% @author Tony Rogvall <tony@rogvall.se>
 %%% @copyright (C) 2013, Tony Rogvall
 %%% @doc
@@ -11,6 +15,13 @@
 -module(intrin).
 
 -on_load(init/0).
+
+
+
+
+
+
+
 
 
 
@@ -80,6 +91,8 @@
 -export([mm_rsqrt_ss/2]).
 -export([mm_min_ss/2]).
 -export([mm_max_ss/2]).
+
+
 -export([mm_add_ps/2]).
 -export([mm_sub_ps/2]).
 -export([mm_mul_ps/2]).
@@ -338,15 +351,68 @@
 -export([mm_testnzc_si128/2]).
 
 
+
+-export([vadd_s8/3]).
+-export([vadd_s16/3]).
+-export([vadd_s32/3]).
+-export([vadd_s64/3]).
+-export([vadd_f32/3]).
+
+-export([vadd_u8/3]).
+-export([vadd_u16/3]).
+-export([vadd_u32/3]).
+-export([vadd_u64/3]).
+
+-export([vaddq_s8/3]).
+-export([vaddq_s16/3]).
+-export([vaddq_s32/3]).
+-export([vaddq_s64/3]).
+-export([vaddq_f32/3]).
+
+-export([vaddq_u8/3]).
+-export([vaddq_u16/3]).
+-export([vaddq_u32/3]).
+-export([vaddq_u64/3]).
+
+-export([vaddl_s8/3]).
+-export([vaddl_s16/3]).
+-export([vaddl_s32/3]).
+
+-export([vaddl_u8/3]).
+-export([vaddl_u16/3]).
+-export([vaddl_u32/3]).
+
+-export([vaddw_s8/3]).
+-export([vaddw_s16/3]).
+-export([vaddw_s32/3]).
+
+-export([vaddw_u8/3]).
+-export([vaddw_u16/3]).
+-export([vaddw_u32/3]).
+
+
 -export([mm_move/2]).
 -export([mm_set/2]).
 -export([mm_get/1]).
 -export([mm_load/3]).
+
+-export([vmov/2]).
+-export([vset/2]).
+-export([vget/1]).
+-export([vld/3]).
+
 -export([info/1]).
 
 init() ->
     Nif = filename:join([code:priv_dir(intrin),"intrin_nif"]),
     erlang:load_nif(Nif, 0).
+
+
+
+
+
+
+
 
 
 
@@ -416,6 +482,8 @@ mm_rcp_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_rsqrt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_min_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_max_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
+
+
 mm_add_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_sub_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_mul_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
@@ -674,8 +742,54 @@ mm_testc_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_testnzc_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
 
 
+
+vadd_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_f32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vadd_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vadd_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vaddq_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_f32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vaddq_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddq_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vaddl_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddl_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddl_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vaddl_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddl_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddl_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vaddw_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddw_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddw_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+vaddw_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddw_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddw_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
 mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_set(_Dst,_Data) -> erlang:error(nif_not_loaded).
 mm_load(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
 mm_get(_Src) -> erlang:error(nif_not_loaded).
+
+vmov(_Dst,_Src) -> erlang:error(nif_not_loaded).
+vset(_Dst,_Data) -> erlang:error(nif_not_loaded).
+vld(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
+vget(_Src) -> erlang:error(nif_not_loaded).
+
 info(_Info) -> erlang:error(nif_not_loaded).
