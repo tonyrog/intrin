@@ -38,7 +38,14 @@
 -export([nm/3]).
 #define DEF_void_Qd_Qn_Dm(pfx,nm,qd,dn,dm) \
 -export([nm/3]).
-
+#define DEF_void_Dd_Qn_Qm(pfx,nm,dd,qn,qm) \
+-export([nm/3]).
+#define DEF_void_Dd_Dn_Dm_Dk(pfx,nm,dd,dn,dm,dk) \
+-export([nm/4]).
+#define DEF_void_Qd_Qn_Qm_Qk(pfx,nm,qd,qn,qm,dk) \
+-export([nm/4]).
+#define DEF_void_Qd_Qn_Dm_Dk(pfx,nm,qd,qn,dm,dk) \
+-export([nm/4]).
 
 #include "mmx.inc"
 #include "sse.inc"
@@ -75,6 +82,10 @@
 #undef DEF_void_Qd_Qn_Qm
 #undef DEF_void_Qd_Dn_Dm
 #undef DEF_void_Qd_Qn_Dm
+#undef DEF_void_Dd_Qn_Qm
+#undef DEF_void_Dd_Dn_Dm_Dk
+#undef DEF_void_Qd_Qn_Qm_Qk
+#undef DEF_void_Qd_Qn_Dm_Dk
 
 init() ->
     Nif = filename:join([code:priv_dir(intrin),"intrin_nif"]),
@@ -110,6 +121,14 @@ nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
 #define DEF_void_Qd_Qn_Dm(pfx,nm,qd,dn,dm) \
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Dd_Qn_Qm(pfx,nm,dd,qn,qm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Dd_Dn_Dm_Dk(pfx,nm,dd,dn,dm,dk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Qm_Qk(pfx,nm,qd,qn,qm,qk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Dm_Dk(pfx,nm,qd,qn,dm,dk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
 
 #include "mmx.inc"
 #include "sse.inc"

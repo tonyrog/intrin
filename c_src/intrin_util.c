@@ -23,8 +23,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #ifdef __arm__
-extern void memcpy(void* dst, void* src, size_t len);
-extern void memset(void* dst, int val, size_t len);
+extern void* memcpy(void* dst, void* src, size_t len);
+extern void* memset(void* dst, int val, size_t len);
 #else
 #include <memory.h>
 #endif

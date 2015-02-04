@@ -352,43 +352,222 @@
 
 
 
+
 -export([vadd_s8/3]).
 -export([vadd_s16/3]).
 -export([vadd_s32/3]).
 -export([vadd_s64/3]).
 -export([vadd_f32/3]).
-
 -export([vadd_u8/3]).
 -export([vadd_u16/3]).
 -export([vadd_u32/3]).
 -export([vadd_u64/3]).
+
 
 -export([vaddq_s8/3]).
 -export([vaddq_s16/3]).
 -export([vaddq_s32/3]).
 -export([vaddq_s64/3]).
 -export([vaddq_f32/3]).
-
 -export([vaddq_u8/3]).
 -export([vaddq_u16/3]).
 -export([vaddq_u32/3]).
 -export([vaddq_u64/3]).
 
+
 -export([vaddl_s8/3]).
 -export([vaddl_s16/3]).
 -export([vaddl_s32/3]).
-
 -export([vaddl_u8/3]).
 -export([vaddl_u16/3]).
 -export([vaddl_u32/3]).
 
+
 -export([vaddw_s8/3]).
 -export([vaddw_s16/3]).
 -export([vaddw_s32/3]).
-
 -export([vaddw_u8/3]).
 -export([vaddw_u16/3]).
 -export([vaddw_u32/3]).
+
+
+-export([vhadd_s8/3]).
+-export([vhadd_s16/3]).
+-export([vhadd_s32/3]).
+-export([vhadd_u8/3]).
+-export([vhadd_u16/3]).
+-export([vhadd_u32/3]).
+
+
+-export([vhaddq_s8/3]).
+-export([vhaddq_s16/3]).
+-export([vhaddq_s32/3]).
+-export([vhaddq_u8/3]).
+-export([vhaddq_u16/3]).
+-export([vhaddq_u32/3]).
+
+
+
+-export([vrhadd_s8/3]).
+-export([vrhadd_s16/3]).
+-export([vrhadd_s32/3]).
+-export([vrhadd_u8/3]).
+-export([vrhadd_u16/3]).
+-export([vrhadd_u32/3]).
+
+
+-export([vrhaddq_s8/3]).
+-export([vrhaddq_s16/3]).
+-export([vrhaddq_s32/3]).
+-export([vrhaddq_u8/3]).
+-export([vrhaddq_u16/3]).
+-export([vrhaddq_u32/3]).
+
+
+-export([vqadd_s8/3]).
+-export([vqadd_s16/3]).
+-export([vqadd_s32/3]).
+-export([vqadd_s64/3]).
+-export([vqadd_u8/3]).
+-export([vqadd_u16/3]).
+-export([vqadd_u32/3]).
+-export([vqadd_u64/3]).
+
+
+-export([vqaddq_s8/3]).
+-export([vqaddq_s16/3]).
+-export([vqaddq_s32/3]).
+-export([vqaddq_s64/3]).
+-export([vqaddq_u8/3]).
+-export([vqaddq_u16/3]).
+-export([vqaddq_u32/3]).
+-export([vqaddq_u64/3]).
+
+
+-export([vaddhn_s16/3]).
+-export([vaddhn_s32/3]).
+-export([vaddhn_s64/3]).
+-export([vaddhn_u16/3]).
+-export([vaddhn_u32/3]).
+-export([vaddhn_u64/3]).
+
+
+-export([vraddhn_s16/3]).
+-export([vraddhn_s32/3]).
+-export([vraddhn_s64/3]).
+-export([vraddhn_u16/3]).
+-export([vraddhn_u32/3]).
+-export([vraddhn_u64/3]).
+
+
+-export([vmul_s8/3]).
+-export([vmul_s16/3]).
+-export([vmul_s32/3]).
+-export([vmul_f32/3]).
+-export([vmul_u8/3]).
+-export([vmul_u16/3]).
+-export([vmul_u32/3]).
+
+
+
+-export([vmulq_s8/3]).
+-export([vmulq_s16/3]).
+-export([vmulq_s32/3]).
+-export([vmulq_f32/3]).
+-export([vmulq_u8/3]).
+-export([vmulq_u16/3]).
+-export([vmulq_u32/3]).
+
+
+
+-export([vqdmulh_s16/3]).
+-export([vqdmulh_s32/3]).
+
+
+-export([vqdmulhq_s16/3]).
+-export([vqdmulhq_s32/3]).
+
+
+-export([vqrdmulh_s16/3]).
+-export([vqrdmulh_s32/3]).
+
+
+-export([vqrdmulhq_s16/3]).
+-export([vqrdmulhq_s32/3]).
+
+
+
+-export([vmull_s8/3]).
+-export([vmull_s16/3]).
+-export([vmull_s32/3]).
+-export([vmull_u8/3]).
+-export([vmull_u16/3]).
+-export([vmull_u32/3]).
+
+
+
+-export([vqdmull_s16/3]).
+-export([vqdmull_s32/3]).
+
+
+-export([vmla_s8/4]).
+-export([vmla_s16/4]).
+-export([vmla_s32/4]).
+-export([vmla_f32/4]).
+-export([vmla_u8/4]).
+-export([vmla_u16/4]).
+-export([vmla_u32/4]).
+
+
+-export([vmlaq_s8/4]).
+-export([vmlaq_s16/4]).
+-export([vmlaq_s32/4]).
+-export([vmlaq_f32/4]).
+-export([vmlaq_u8/4]).
+-export([vmlaq_u16/4]).
+-export([vmlaq_u32/4]).
+
+
+-export([vmlal_s8/4]).
+-export([vmlal_s16/4]).
+-export([vmlal_s32/4]).
+-export([vmlal_u8/4]).
+-export([vmlal_u16/4]).
+-export([vmlal_u32/4]).
+
+
+-export([vqdmlal_s16/4]).
+-export([vqdmlal_s32/4]).
+
+
+-export([vmls_s8/4]).
+-export([vmls_s16/4]).
+-export([vmls_s32/4]).
+-export([vmls_f32/4]).
+-export([vmls_u8/4]).
+-export([vmls_u16/4]).
+-export([vmls_u32/4]).
+
+
+-export([vmlsq_s8/4]).
+-export([vmlsq_s16/4]).
+-export([vmlsq_s32/4]).
+-export([vmlsq_f32/4]).
+-export([vmlsq_u8/4]).
+-export([vmlsq_u16/4]).
+-export([vmlsq_u32/4]).
+
+
+-export([vmlsl_s8/4]).
+-export([vmlsl_s16/4]).
+-export([vmlsl_s32/4]).
+-export([vmlsl_u8/4]).
+-export([vmlsl_u16/4]).
+-export([vmlsl_u32/4]).
+
+
+-export([vqdmlsl_s16/4]).
+-export([vqdmlsl_s32/4]).
 
 
 -export([mm_move/2]).
@@ -743,43 +922,222 @@ mm_testnzc_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
 
 
 
+
 vadd_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_f32(_D,_N,_M) -> erlang:error(nif_not_loaded).
-
 vadd_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vadd_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
 
 vaddq_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_f32(_D,_N,_M) -> erlang:error(nif_not_loaded).
-
 vaddq_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddq_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
 
+
 vaddl_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddl_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddl_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
-
 vaddl_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddl_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddl_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
 
+
 vaddw_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddw_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddw_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
-
 vaddw_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddw_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
 vaddw_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vhadd_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhadd_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhadd_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhadd_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhadd_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhadd_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vhaddq_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhaddq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhaddq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhaddq_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhaddq_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vhaddq_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+
+vrhadd_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhadd_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhadd_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhadd_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhadd_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhadd_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vrhaddq_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhaddq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhaddq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhaddq_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhaddq_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vrhaddq_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vqadd_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqadd_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vqaddq_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqaddq_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vaddhn_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddhn_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddhn_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddhn_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddhn_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vaddhn_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vraddhn_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vraddhn_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vraddhn_s64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vraddhn_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vraddhn_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vraddhn_u64(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vmul_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmul_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmul_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmul_f32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmul_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmul_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmul_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+
+vmulq_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmulq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmulq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmulq_f32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmulq_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmulq_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmulq_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+
+vqdmulh_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqdmulh_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vqdmulhq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqdmulhq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vqrdmulh_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqrdmulh_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vqrdmulhq_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqrdmulhq_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+
+vmull_s8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmull_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmull_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmull_u8(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmull_u16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vmull_u32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+
+vqdmull_s16(_D,_N,_M) -> erlang:error(nif_not_loaded).
+vqdmull_s32(_D,_N,_M) -> erlang:error(nif_not_loaded).
+
+
+vmla_s8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmla_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmla_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmla_f32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmla_u8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmla_u16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmla_u32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vmlaq_s8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlaq_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlaq_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlaq_f32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlaq_u8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlaq_u16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlaq_u32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vmlal_s8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlal_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlal_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlal_u8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlal_u16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlal_u32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vqdmlal_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vqdmlal_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vmls_s8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmls_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmls_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmls_f32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmls_u8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmls_u16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmls_u32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vmlsq_s8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsq_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsq_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsq_f32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsq_u8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsq_u16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsq_u32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vmlsl_s8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsl_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsl_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsl_u8(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsl_u16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vmlsl_u32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+
+vqdmlsl_s16(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+vqdmlsl_s32(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
 
 
 mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).
