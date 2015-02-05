@@ -1,6 +1,6 @@
 /***************************************************************************
  *
- * Copyright (C) 2007 - 2012, Rogvall Invest AB, <tony@rogvall.se>
+ * Copyright (C) 2007 - 2015, Rogvall Invest AB, <tony@rogvall.se>
  *
  * This software is licensed as described in the file COPYRIGHT, which
  * you should have received as part of this distribution. The terms
@@ -15,15 +15,9 @@
  *
  ***************************************************************************/
 
-#ifndef __INTRIN_UTIL_H__
-#define __INTRIN_UTIL_H__
+#ifndef __NEON_CPUID_H__
+#define __NEON_CPUID_H__
 
-extern int intrin_cpu_cache_line_size(void);
-extern int intrin_cpu_vendor_name(char* buf, size_t maxlen);
-extern int intrin_cpu_serial_number(unsigned char* buf, size_t maxlen);
-extern int intrin_cpu_features(char* buf, size_t maxlen);
-extern int intrin_cpuid_check(int cxmask, int dxmask);
-extern void intrin_init(void);
+#define CPUID_NEON  0x00000001
 
 #endif
-

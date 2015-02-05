@@ -1,0 +1,2 @@
+gcc -x c++ -E x86_erl_template | sed 's/^#.*//g' > ../src/x86.erl
+

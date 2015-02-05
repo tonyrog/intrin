@@ -17,8 +17,8 @@
 //
 // CPUID x86 
 //
-#ifndef __INTRIN_CPUID_H__
-#define __INTRIN_CPUID_H__
+#ifndef __X86_CPUID_H__
+#define __X86_CPUID_H__
 
 /* CPUID FUNCTION 1, edx info */
 #define	CPUID_FPU	0x00000001

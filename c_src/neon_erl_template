@@ -1,0 +1,74 @@
+%%% @author Tony Rogvall <tony@rogvall.se>
+%%% @copyright (C) 2015, Tony Rogvall
+%%% @doc
+%%%    neon simd instruction interface
+%%% @end
+%%% Created : 4 Apr 2015 by Tony Rogvall <tony@rogvall.se>
+
+-module(neon).
+
+-on_load(init/0).
+
+#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm) \
+-export([nm/3]).
+#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm) \
+-export([nm/3]).
+#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm) \
+-export([nm/3]).
+#define DEF_void_Qd_Qn_Dm(nm,qd,dn,dm) \
+-export([nm/3]).
+#define DEF_void_Dd_Qn_Qm(nm,dd,qn,qm) \
+-export([nm/3]).
+#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk) \
+-export([nm/4]).
+#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,dk) \
+-export([nm/4]).
+#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk) \
+-export([nm/4]).
+
+#include "neon.inc"
+
+-export([vmov/2]).
+-export([vset/2]).
+-export([vget/1]).
+-export([vld/3]).
+
+-export([info/1]).
+
+#undef DEF_void_Dd_Dn_Dm
+#undef DEF_void_Qd_Qn_Qm
+#undef DEF_void_Qd_Dn_Dm
+#undef DEF_void_Qd_Qn_Dm
+#undef DEF_void_Dd_Qn_Qm
+#undef DEF_void_Dd_Dn_Dm_Dk
+#undef DEF_void_Qd_Qn_Qm_Qk
+#undef DEF_void_Qd_Qn_Dm_Dk
+
+init() ->
+    Nif = filename:join([code:priv_dir(intrin),"neon_nif"]),
+    erlang:load_nif(Nif, 0).
+#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Dm(nm,qd,dn,dm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Dd_Qn_Qm(nm,dd,qn,qm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,qk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
+#include "neon.inc"
+
+vmov(_Dst,_Src) -> erlang:error(nif_not_loaded).
+vset(_Dst,_Data) -> erlang:error(nif_not_loaded).
+vld(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
+vget(_Src) -> erlang:error(nif_not_loaded).
+
+info(_Info) ->  erlang:error(nif_not_loaded).

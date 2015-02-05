@@ -22,15 +22,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#ifdef __arm__
-extern void* memcpy(void* dst, void* src, size_t len);
-extern void* memset(void* dst, int val, size_t len);
-#else
 #include <memory.h>
-#endif
 
-#include "intrin_util.h"
-#include "intrin_cpuid.h"
+#include "x86_util.h"
+#include "x86_cpuid.h"
 
 static unsigned char   cpu_serial_number[64];
 static size_t          cpu_serial_number_len = 0;
@@ -47,7 +42,7 @@ static int             cpu_feature_dx = 0;
 // return 0 if not available otherwise the 
 // length of the full serial number in bytes
 //
-int intrin_cpu_serial_number(unsigned char* buf, size_t maxlen)
+int x86_cpu_serial_number(unsigned char* buf, size_t maxlen)
 {
     int n = (cpu_serial_number_len > maxlen) ? maxlen : cpu_serial_number_len;
     memcpy(buf, cpu_serial_number, n);
@@ -59,26 +54,26 @@ int intrin_cpu_serial_number(unsigned char* buf, size_t maxlen)
 // retur 0 if not avaiable otherwise the 
 // lenfth of the full cpu vendor name in bytes
 //
-int intrin_cpu_vendor_name(char* buf, size_t maxlen)
+int x86_cpu_vendor_name(char* buf, size_t maxlen)
 {
     int n = (cpu_vendor_name_len > maxlen) ? maxlen : cpu_vendor_name_len;
     memcpy(buf, cpu_vendor_name, n);
     return n;
 }
 
-int intrin_cpu_features(char* buf, size_t maxlen)
+int x86_cpu_features(char* buf, size_t maxlen)
 {
     int n = (cpu_features_len > maxlen) ? maxlen : cpu_features_len;
     memcpy(buf, cpu_features, n);
     return n;
 }
 
-int intrin_cpu_cache_line_size()
+int x86_cpu_cache_line_size()
 {
     return cpu_cache_line_size;
 }
 
-int intrin_cpuid_check(int cxmask, int dxmask)
+int x86_cpuid_check(int cxmask, int dxmask)
 {
     return (((cxmask & cpu_feature_cx) == cxmask) &&
 	    ((dxmask & cpu_feature_dx) == dxmask));
@@ -253,7 +248,7 @@ static int cpuidCacheLineSize()
 #endif
 
 
-void intrin_init()
+void x86_init()
 {
 #if defined(__i386__) || defined(__x86_64__)
     char* name;
