@@ -30,17 +30,41 @@
 #define DEF_void_XMMd_XMMs_imm8(pfx,nm,dt,st,vt) \
 -export([nm/3]).
 
+#define DEF_void_Dd_Dn_Dm(pfx,nm,dd,dn,dm) \
+-export([nm/3]).
+#define DEF_void_Qd_Qn_Qm(pfx,nm,qd,qn,qm) \
+-export([nm/3]).
+#define DEF_void_Qd_Dn_Dm(pfx,nm,qd,dn,dm) \
+-export([nm/3]).
+#define DEF_void_Qd_Qn_Dm(pfx,nm,qd,dn,dm) \
+-export([nm/3]).
+#define DEF_void_Dd_Qn_Qm(pfx,nm,dd,qn,qm) \
+-export([nm/3]).
+#define DEF_void_Dd_Dn_Dm_Dk(pfx,nm,dd,dn,dm,dk) \
+-export([nm/4]).
+#define DEF_void_Qd_Qn_Qm_Qk(pfx,nm,qd,qn,qm,dk) \
+-export([nm/4]).
+#define DEF_void_Qd_Qn_Dm_Dk(pfx,nm,qd,qn,dm,dk) \
+-export([nm/4]).
+
 #include "mmx.inc"
 #include "sse.inc"
 #include "sse2.inc"
 #include "sse3.inc"
 #include "ssse3.inc"
 #include "sse4.1.inc"
+#include "neon.inc"
 
 -export([mm_move/2]).
 -export([mm_set/2]).
 -export([mm_get/1]).
 -export([mm_load/3]).
+
+-export([vmov/2]).
+-export([vset/2]).
+-export([vget/1]).
+-export([vld/3]).
+
 -export([info/1]).
 
 #undef DEF_void_XMMd_XMMs1
@@ -53,6 +77,15 @@
 #undef DEF_void_MMd
 #undef DEF_bool_MMd_MMs
 #undef DEF_void_MMd_imm8
+
+#undef DEF_void_Dd_Dn_Dm
+#undef DEF_void_Qd_Qn_Qm
+#undef DEF_void_Qd_Dn_Dm
+#undef DEF_void_Qd_Qn_Dm
+#undef DEF_void_Dd_Qn_Qm
+#undef DEF_void_Dd_Dn_Dm_Dk
+#undef DEF_void_Qd_Qn_Qm_Qk
+#undef DEF_void_Qd_Qn_Dm_Dk
 
 init() ->
     Nif = filename:join([code:priv_dir(intrin),"intrin_nif"]),
@@ -80,15 +113,39 @@ nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
 #define DEF_void_MMd(pfx,nm,dt) \
 nm(_Dst) -> erlang:error(nif_not_loaded).
 
+#define DEF_void_Dd_Dn_Dm(pfx,nm,dd,dn,dm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Qm(pfx,nm,qd,qn,qm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Dn_Dm(pfx,nm,qd,dn,dm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Dm(pfx,nm,qd,dn,dm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Dd_Qn_Qm(pfx,nm,dd,qn,qm) \
+nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
+#define DEF_void_Dd_Dn_Dm_Dk(pfx,nm,dd,dn,dm,dk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Qm_Qk(pfx,nm,qd,qn,qm,qk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+#define DEF_void_Qd_Qn_Dm_Dk(pfx,nm,qd,qn,dm,dk) \
+nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
+
 #include "mmx.inc"
 #include "sse.inc"
 #include "sse2.inc"
 #include "sse3.inc"
 #include "ssse3.inc"
 #include "sse4.1.inc"
+#include "neon.inc"
 
 mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_set(_Dst,_Data) -> erlang:error(nif_not_loaded).
 mm_load(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
 mm_get(_Src) -> erlang:error(nif_not_loaded).
+
+vmov(_Dst,_Src) -> erlang:error(nif_not_loaded).
+vset(_Dst,_Data) -> erlang:error(nif_not_loaded).
+vld(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
+vget(_Src) -> erlang:error(nif_not_loaded).
+
 info(_Info) ->  erlang:error(nif_not_loaded).
