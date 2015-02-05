@@ -1,4 +1,3 @@
-
 // VADD.t = s8ms16,s32,s64,f32,u8,u16,u32,u64     D = N+M
 DEF_void_Dd_Dn_Dm(_, vadd_s8, int8x8_t, int8x8_t, int8x8_t)
 DEF_void_Dd_Dn_Dm(_, vadd_s16, int16x4_t, int16x4_t, int16x4_t)
@@ -90,7 +89,7 @@ DEF_void_Qd_Qn_Qm(_, vqaddq_u16, uint16x8_t, uint16x8_t, uint16x8_t)
 DEF_void_Qd_Qn_Qm(_, vqaddq_u32, uint32x4_t, uint32x4_t, uint32x4_t)
 DEF_void_Qd_Qn_Qm(_, vqaddq_u64, uint64x2_t, uint64x2_t, uint64x2_t)
 
-// VADDHN.type = s16,s32,s64,u16,u32,u64  D = N+M (Select high result)
+// VADDHN.t = s16,s32,s64,u16,u32,u64  D = N+M (Select high result)
 DEF_void_Dd_Qn_Qm(_, vaddhn_s16, int8x8_t, int16x8_t, int16x8_t)
 DEF_void_Dd_Qn_Qm(_, vaddhn_s32, int16x4_t, int32x4_t, int32x4_t)
 DEF_void_Dd_Qn_Qm(_, vaddhn_s64, int32x2_t, int64x2_t, int64x2_t)
@@ -98,7 +97,7 @@ DEF_void_Dd_Qn_Qm(_, vaddhn_u16, uint8x8_t, uint16x8_t, uint16x8_t)
 DEF_void_Dd_Qn_Qm(_, vaddhn_u32, uint16x4_t, uint32x4_t, uint32x4_t)
 DEF_void_Dd_Qn_Qm(_, vaddhn_u64, uint32x2_t, uint64x2_t, uint64x2_t)
 
-// VRADDHN.type = s16,s32,s64,u16,u32,u64 D = N+M Rounded (Select high result)
+// VRADDHN.t = s16,s32,s64,u16,u32,u64 D = N+M Rounded (Select high result)
 DEF_void_Dd_Qn_Qm(_, vraddhn_s16, int8x8_t, int16x8_t, int16x8_t)
 DEF_void_Dd_Qn_Qm(_, vraddhn_s32, int16x4_t, int32x4_t, int32x4_t)
 DEF_void_Dd_Qn_Qm(_, vraddhn_s64, int32x2_t, int64x2_t, int64x2_t)
@@ -106,7 +105,7 @@ DEF_void_Dd_Qn_Qm(_, vraddhn_u16, uint8x8_t, uint16x8_t, uint16x8_t)
 DEF_void_Dd_Qn_Qm(_, vraddhn_u32, uint16x4_t, uint32x4_t, uint32x4_t)
 DEF_void_Dd_Qn_Qm(_, vraddhn_u64, uint32x2_t, uint64x2_t, uint64x2_t)
 
-// VMUL.type = s8,s16,s32,f32,u8,u16,u32,p8   D=N*M
+// VMUL.t = s8,s16,s32,f32,u8,u16,u32,p8   D=N*M
 DEF_void_Dd_Dn_Dm(_, vmul_s8, int8x8_t, int8x8_t, int8x8_t)
 DEF_void_Dd_Dn_Dm(_, vmul_s16, int16x4_t, int16x4_t, int16x4_t)
 DEF_void_Dd_Dn_Dm(_, vmul_s32, int32x2_t, int32x2_t, int32x2_t)
@@ -116,7 +115,7 @@ DEF_void_Dd_Dn_Dm(_, vmul_u16, uint16x4_t, uint16x4_t, uint16x4_t)
 DEF_void_Dd_Dn_Dm(_, vmul_u32, uint32x2_t, uint32x2_t, uint32x2_t)
 // DEF_void_Pd_Pn_Pm(_, vmul_p8,  poly8x8_t,  poly8x8_t, poly8x8_t)
 
-// VMULQ.type = s8,s16,s32,f32,u8,u16,u32,p8   D=N*M
+// VMULQ.t = s8,s16,s32,f32,u8,u16,u32,p8   D=N*M
 DEF_void_Qd_Qn_Qm(_, vmulq_s8,  int8x16_t, int8x16_t, int8x16_t)
 DEF_void_Qd_Qn_Qm(_, vmulq_s16, int16x8_t, int16x8_t, int16x8_t)
 DEF_void_Qd_Qn_Qm(_, vmulq_s32, int32x4_t, int32x4_t, int32x4_t)
@@ -126,24 +125,24 @@ DEF_void_Qd_Qn_Qm(_, vmulq_u16, uint16x8_t, uint16x8_t, uint16x8_t)
 DEF_void_Qd_Qn_Qm(_, vmulq_u32, uint32x4_t, uint32x4_t, uint32x4_t)
 // DEF_void_Pd_Pn_Pm(_, vmulq_p8,  poly8x16_t,  poly16x8_t, poly16x8_t)
 
-// VQDMULH.type = s16,s32
+// VQDMULH.t = s16,s32
 DEF_void_Dd_Dn_Dm(_, vqdmulh_s16, int16x4_t, int16x4_t, int16x4_t)
 DEF_void_Dd_Dn_Dm(_, vqdmulh_s32, int32x2_t, int32x2_t, int32x2_t)
 
-// VQDMULHQ.type = s16,s32
+// VQDMULHQ.t = s16,s32
 DEF_void_Qd_Qn_Qm(_, vqdmulhq_s16, int16x8_t, int16x8_t, int16x8_t)
 DEF_void_Qd_Qn_Qm(_, vqdmulhq_s32, int32x4_t, int32x4_t, int32x4_t)
 
-// VQRDMULH.type = s16,s32
+// VQRDMULH.t = s16,s32
 DEF_void_Dd_Dn_Dm(_, vqrdmulh_s16, int16x4_t, int16x4_t, int16x4_t)
 DEF_void_Dd_Dn_Dm(_, vqrdmulh_s32, int32x2_t, int32x2_t, int32x2_t)
 
-// VQRDMULHQ.type = s16,s32
+// VQRDMULHQ.t = s16,s32
 DEF_void_Qd_Qn_Qm(_, vqrdmulhq_s16, int16x8_t, int16x8_t, int16x8_t)
 DEF_void_Qd_Qn_Qm(_, vqrdmulhq_s32, int32x4_t, int32x4_t, int32x4_t)
 
 
-// VMULL.type = s8,s16,s32,u8,u16,u32, p8
+// VMULL.t = s8,s16,s32,u8,u16,u32, p8
 DEF_void_Qd_Dn_Dm(_, vmull_s8, int16x8_t, int8x8_t, int8x8_t)
 DEF_void_Qd_Dn_Dm(_, vmull_s16, int32x4_t, int16x4_t, int16x4_t)
 DEF_void_Qd_Dn_Dm(_, vmull_s32, int64x2_t, int32x2_t, int32x2_t)
@@ -152,11 +151,11 @@ DEF_void_Qd_Dn_Dm(_, vmull_u16, uint32x4_t, uint16x4_t, uint16x4_t)
 DEF_void_Qd_Dn_Dm(_, vmull_u32, uint64x2_t, uint32x2_t, uint32x2_t)
 //DEF_void_Pd_pn_pm(_, vmull_p8, poly16x8, poly8x8_t, poly8x8_t)
 
-// VQDMULL.type = s16,s32
+// VQDMULL.t = s16,s32
 DEF_void_Qd_Dn_Dm(_, vqdmull_s16, int32x4_t, int16x4_t, int16x4_t)
 DEF_void_Qd_Dn_Dm(_, vqdmull_s32, int64x2_t, int32x2_t, int32x2_t)
 
-// VMLA.type = s8,s16,s32,f32,u8,u16,u32 (Muliply Accumulate) D=N*M+K
+// VMLA.t = s8,s16,s32,f32,u8,u16,u32 (Muliply Accumulate) D=N*M+K
 DEF_void_Dd_Dn_Dm_Dk(_, vmla_s8, int8x8_t, int8x8_t, int8x8_t, int8x8_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmla_s16, int16x4_t, int16x4_t, int16x4_t,  int16x4_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmla_s32, int32x2_t, int32x2_t, int32x2_t,  int32x2_t)
@@ -165,7 +164,7 @@ DEF_void_Dd_Dn_Dm_Dk(_, vmla_u8,  uint8x8_t,  uint8x8_t,  uint8x8_t,  uint8x8_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmla_u16, uint16x4_t, uint16x4_t, uint16x4_t, uint16x4_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmla_u32, uint32x2_t, uint32x2_t, uint32x2_t, uint32x2_t)
 
-// VMLAQ.type = s8.s16,s32,f32,u8,u16,u32
+// VMLAQ.t = s8.s16,s32,f32,u8,u16,u32
 DEF_void_Qd_Qn_Qm_Qk(_, vmlaq_s8,  int8x16_t, int8x16_t, int8x16_t,int8x16_t)
 DEF_void_Qd_Qn_Qm_Qk(_, vmlaq_s16, int16x8_t, int16x8_t, int16x8_t,int16x8_t)
 DEF_void_Qd_Qn_Qm_Qk(_, vmlaq_s32, int32x4_t, int32x4_t, int32x4_t,int32x4_t)
@@ -174,7 +173,7 @@ DEF_void_Qd_Qn_Qm_Qk(_, vmlaq_u8,  uint8x16_t, uint8x16_t, uint8x16_t, uint8x16_
 DEF_void_Qd_Qn_Qm_Qk(_, vmlaq_u16, uint16x8_t, uint16x8_t, uint16x8_t, uint16x8_t)
 DEF_void_Qd_Qn_Qm_Qk(_, vmlaq_u32, uint32x4_t, uint32x4_t, uint32x4_t, uint32x4_t)
 
-// VMLAL.type = s8,s16,s32,u8,u16,u32
+// VMLAL.t = s8,s16,s32,u8,u16,u32
 DEF_void_Qd_Qn_Dm_Dk(_, vmlal_s8, int16x8_t, int16x8_t, int8x8_t, int8x8_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlal_s16, int32x4_t, int32x4_t, int16x4_t, int16x4_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlal_s32, int64x2_t, int64x2_t, int32x2_t, int32x2_t)
@@ -182,11 +181,11 @@ DEF_void_Qd_Qn_Dm_Dk(_, vmlal_u8, uint16x8_t, uint16x8_t, uint8x8_t, uint8x8_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlal_u16, uint32x4_t, uint32x4_t, uint16x4_t, uint16x4_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlal_u32, uint64x2_t, uint64x2_t, uint32x2_t, uint32x2_t)
 
-// VQDMLAL.type = s16,s32
+// VQDMLAL.t = s16,s32
 DEF_void_Qd_Qn_Dm_Dk(_, vqdmlal_s16, int32x4_t, int32x4_t, int16x4_t, int16x4_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vqdmlal_s32, int64x2_t, int64x2_t, int32x2_t, int32x2_t)
 
-// VMLS.type = s8,s16,s32,f32,u8,u16,u32 (Muliply Subtract)
+// VMLS.t = s8,s16,s32,f32,u8,u16,u32
 DEF_void_Dd_Dn_Dm_Dk(_, vmls_s8, int8x8_t, int8x8_t, int8x8_t,  int8x8_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmls_s16, int16x4_t, int16x4_t, int16x4_t, int16x4_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmls_s32, int32x2_t, int32x2_t, int32x2_t, int32x2_t)
@@ -195,7 +194,7 @@ DEF_void_Dd_Dn_Dm_Dk(_, vmls_u8,  uint8x8_t,  uint8x8_t,  uint8x8_t,  uint8x8_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmls_u16, uint16x4_t, uint16x4_t, uint16x4_t,  uint16x4_t)
 DEF_void_Dd_Dn_Dm_Dk(_, vmls_u32, uint32x2_t, uint32x2_t, uint32x2_t, uint32x2_t)
 
-// VMLSQ.type = s8.s16,s32,f32,u8,u16,u32
+// VMLSQ.t = s8.s16,s32,f32,u8,u16,u32
 DEF_void_Qd_Qn_Qm_Qk(_, vmlsq_s8,  int8x16_t, int8x16_t, int8x16_t, int8x16_t)
 DEF_void_Qd_Qn_Qm_Qk(_, vmlsq_s16, int16x8_t, int16x8_t, int16x8_t, int16x8_t)
 DEF_void_Qd_Qn_Qm_Qk(_, vmlsq_s32, int32x4_t, int32x4_t, int32x4_t, int32x4_t)
@@ -204,7 +203,7 @@ DEF_void_Qd_Qn_Qm_Qk(_, vmlsq_u8,  uint8x16_t, uint8x16_t, uint8x16_t, uint8x16_
 DEF_void_Qd_Qn_Qm_Qk(_, vmlsq_u16, uint16x8_t, uint16x8_t, uint16x8_t, uint16x8_t)
 DEF_void_Qd_Qn_Qm_Qk(_, vmlsq_u32, uint32x4_t, uint32x4_t, uint32x4_t, uint32x4_t)
 
-// VMLSL.type = s8,s16,s32,u8,u16,u32
+// VMLSL.t = s8,s16,s32,u8,u16,u32
 DEF_void_Qd_Qn_Dm_Dk(_, vmlsl_s8, int16x8_t, int16x8_t, int8x8_t, int8x8_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlsl_s16, int32x4_t, int32x4_t, int16x4_t, int16x4_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlsl_s32, int64x2_t, int64x2_t, int32x2_t, int32x2_t)
@@ -212,7 +211,7 @@ DEF_void_Qd_Qn_Dm_Dk(_, vmlsl_u8, uint16x8_t, uint16x8_t, uint8x8_t, uint8x8_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlsl_u16, uint32x4_t, uint32x4_t, uint16x4_t, uint16x4_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vmlsl_u32, uint64x2_t, uint64x2_t, uint32x2_t, uint32x2_t)
 
-// VQDMLSL.type = s16,s32
+// VQDMLSL.t = s16,s32
 DEF_void_Qd_Qn_Dm_Dk(_, vqdmlsl_s16, int32x4_t, int32x4_t, int16x4_t, int16x4_t)
 DEF_void_Qd_Qn_Dm_Dk(_, vqdmlsl_s32, int64x2_t, int64x2_t, int32x2_t, int32x2_t)
 
@@ -232,7 +231,7 @@ DEF_void_Qd_Qn_Dm_Dk(_, vqdmlsl_s32, int64x2_t, int64x2_t, int32x2_t, int32x2_t)
 // VRND.type = f32
 // VRNDQ.type = f32
 
-// VSUB.t = s8ms16,s32,s64,f32,u8,u16,u32,u64     D = N-M
+// VSUB.t = s8,s16,s32,s64,f32,u8,u16,u32,u64     D = N-M
 DEF_void_Dd_Dn_Dm(_, vsub_s8, int8x8_t, int8x8_t, int8x8_t)
 DEF_void_Dd_Dn_Dm(_, vsub_s16, int16x4_t, int16x4_t, int16x4_t)
 DEF_void_Dd_Dn_Dm(_, vsub_s32, int32x2_t, int32x2_t, int32x2_t)
