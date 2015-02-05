@@ -1,0 +1,182 @@
+#!/usr/bin/env escript
+%% -*- erlang -*-
+%%% @author Tony Rogvall <tony@rogvall.se>
+%%% @copyright (C) 2015, Tony Rogvall
+%%
+%% Generate neon.inc file
+%%
+
+-mode(compile).
+
+main(Args) ->
+    emit_triple(vadd,d, [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
+    emit_triple(vaddq,q, [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
+    emit_triple(vaddl,l, [s8,s16,s32,u8,u16,u32]),
+    emit_triple(vaddw,w, [s8,s16,s32,u8,u16,u32]),
+    emit_triple(vhadd, d, [s8,s16,s32,u8,u16,u32]),
+    emit_triple(vhaddq, q, [s8,s16,s32,u8,u16,u32]),
+    emit_triple(vrhadd, d, [s8,s16,s32,u8,u16,u32]),
+    emit_triple(vrhaddq, q, [s8,s16,s32,u8,u16,u32]),
+    emit_triple(vqadd, d, [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit_triple(vqaddq, q, [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit_triple(vaddhn, n, [s16,s32,s64,u16,u32,u64]),
+    emit_triple(vraddhn, n, [s16,s32,s64,u16,u32,u64]),
+    
+    emit_triple(vmul, d, [s8,s16,s32,f32,u8,u16,u32,p8]),
+    emit_triple(vmulq, q, [s8,s16,s32,f32,u8,u16,u32,p8]),
+    %% vqdmulh.t = s16,s32
+    %% vqdmulhq.t = s16,s32
+    %% vqrdmulh.t = s16,s32
+    %% vqrdmulhq.t = s16,s32
+    %% vmull.t = s8,s16,s32,u8,u16,u32, p8
+    %% vqdmull.t = s16,s32
+    %% vmla.t = s8,s16,s32,f32,u8,u16,u32
+    %% vmlaq.t = s8.s16,s32,f32,u8,u16,u32
+    %% vmlal.t = s8,s16,s32,u8,u16,u32
+    %% vqdmlal.t = s16,s32
+    %% vmls.t = s8,s16,s32,f32,u8,u16,u32
+    %% vmlsq.t = s8.s16,s32,f32,u8,u16,u32
+    %% vmlsl.t = s8,s16,s32,u8,u16,u32
+    %% vqdmlsl.t = s16,s32
+    
+    %% vfma.type = f32
+    %% vfmaq.type = f32
+    %% vfms.type = f32
+    %% vfmsq.type = f32
+    %% vrndn.type = f32
+    %% vrndqn.type = f32
+    %% vrnda.type = f32
+    %% vrndqa.type = f32
+    %% vrndp.type = f32
+    %% vrndqp.type = f32
+    %% vrndm.type = f32
+    %% vrndqm.type = f32
+    %% vrnd.type = f32
+    %% vrndq.type = f32
+    
+    %% vsub.t = s8,s16,s32,s64,f32,u8,u16,u32,u64
+    %% vsubq.t = s8,s16,s32,s64,f32,u8,u16,u32,u64
+    %% vsubl.t = s8,s16,s32,u8,u16,u32
+    %% vsubw.t = s8,s16,s32,u8,u16,u32
+    %% vhsub.t = s8,s16,s32,u8,u16,u32
+    %% vhsubq.t = s8,s16,s32,u8,u16,u32
+    %% vqsub.t = s8,s16,s32,s64,u8,u16,u32,u64
+    %% vqsubq.t = s8,s16,s32,s64,u8,u16,u32,u64
+    %% vsubhn.type = s16,s32,s64,u16,u32,u64
+    %% vrsubhn.type = s16,s32,s64,u16,u32,u64
+    %% vceq.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcge.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcle.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcgt.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vclt.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vceqq.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcgeq.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcleq.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcgtq.type = s8,s16,s32,f32,u8,u16,u32,p8
+    %% vcltq.type = s8,s16,s32,f32,u8,u16,u32,p8
+
+    %% vcage.f32
+    %% vcageq.f32
+    %% vcale.f32
+    %% vcaleq.f32
+    %% vcagt.f32
+    %% vcagtq.f32
+    %% vcalt.f32
+    %% vcaltq.f32
+    %% vtst.type = s8,s16,s32,u8,u16,u32,p8
+    %% vtstq.type = s8,s16,s32,u8,u16,u32,p8
+    %% vabd.type = s8,s16,s32,f32,u8,u16,u32
+    %% vabdq.type = s8,s16,s32,f32,u8,u16,u32
+    halt(0).
+
+
+emit_triple(Instr,Form,Elems) ->
+    T = form_char(Form),
+    io:format("// ~s.t = ~w\n", [string:to_upper(atom_to_list(Instr)), Elems]),
+    _ = [begin
+	     {D,Dt} = case Form of
+			  d -> {"D",elem_to_type(E,d)};
+			  q -> {"Q",elem_to_type(E,q)};
+			  l -> {"Q",elem_to_type(E,l)};
+			  w -> {"Q",elem_to_type(E,l)};
+			  n -> {"D",elem_to_type(E,n)}
+		      end,
+	     {N,Nt} = case Form of
+			  l -> {"D",elem_to_type(E,d)};
+			  w -> {"Q",elem_to_type(E,l)};
+			  n -> {"Q",elem_to_type(E,q)};
+			  _ -> {T, elem_to_type(E,Form)}
+		      end,
+	     {M,Mt} = case Form of
+			  l -> {"D",elem_to_type(E,d)};
+			  w -> {"D",elem_to_type(E,d)};
+			  n -> {"Q",elem_to_type(E,q)};
+			  _ -> {T, elem_to_type(E,Form)}
+		      end,
+	     io:format("DEF_void_~sd_~sn_~sm(_, ~s_~s, ~s, ~s, ~s).\n",
+		       [D,N,M, Instr, E, 
+			Dt, Nt, Mt])
+	 end || E <- Elems].
+
+form_char(d) -> "D";
+form_char(q) -> "Q";
+form_char(l) -> "D";
+form_char(w) -> "W";
+form_char(n) -> "N".
+    
+
+elem_to_type(s8,d) -> "int8x8_t";
+elem_to_type(s8,q) -> "int8x16_t";
+elem_to_type(s8,l) -> "int16x8_t";
+
+elem_to_type(s16,d) -> "int16x4_t";
+elem_to_type(s16,q) -> "int16x8_t";
+elem_to_type(s16,l) -> "int32x4_t";
+elem_to_type(s16,n) -> "int8x8_t";
+
+elem_to_type(s32,d) -> "int32x2_t";
+elem_to_type(s32,q) -> "int32x4_t";
+elem_to_type(s32,l) -> "int64x2_t";
+elem_to_type(s32,n) -> "int16x4_t";
+
+elem_to_type(s64,d) -> "int64x1_t";
+elem_to_type(s64,q) -> "int64x2_t";
+elem_to_type(s64,n) -> "int32x2_t";
+
+elem_to_type(u8,d) -> "uint8x8_t";
+elem_to_type(u8,q) -> "uint8x16_t";
+elem_to_type(u8,l) -> "uint16x8_t";
+
+elem_to_type(u16,d) -> "uint16x4_t";
+elem_to_type(u16,q) -> "uint16x8_t";
+elem_to_type(u16,l) -> "uint32x4_t";
+elem_to_type(u16,n) -> "uint8x8_t";
+
+elem_to_type(u32,d) -> "uint32x2_t";
+elem_to_type(u32,q) -> "uint32x4_t";
+elem_to_type(u32,l) -> "uint64x2_t";
+elem_to_type(u32,n) -> "uint16x4_t";
+
+elem_to_type(u64,d) -> "uint64x1_t";
+elem_to_type(u64,q) -> "uint64x2_t";
+elem_to_type(u64,n) -> "uint32x2_t";
+
+elem_to_type(f32,d) -> "float32x2_t";
+elem_to_type(f32,q) -> "float32x4_t";
+
+elem_to_type(p8,d) -> "poly8x8_t";
+elem_to_type(p8,q) -> "poly8x16_t";
+
+elem_to_type(p16,d) -> "poly16x4_t";
+elem_to_type(p16,q) -> "poly16x8_t";
+elem_to_type(no,no) -> no.
+
+
+
+
+    
+
+
+
+
+    
