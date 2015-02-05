@@ -252,7 +252,6 @@ void intrin_init()
 {
 #if defined(__i386__) || defined(__x86_64__)
     char* name;
-    char* hex = "0123456789ABCDEF";
     int i;
     int j;
 
@@ -295,15 +294,8 @@ void intrin_init()
     cpu_cache_line_size = cpuidCacheLineSize();
 
     if (cpu_feature_cx & CPUID_PSN) {
-	char xserial[25];
 	cpuidSerial(cpu_serial_number);
 	cpu_serial_number_len = 12;
-
-	for (i = 0; i < 12; i++) {
-	    xserial[2*i] = hex[(cpu_serial_number[i] >> 4)&0xf];
-	    xserial[2*i+1] = hex[cpu_serial_number[i] & 0xf];
-	}
-	xserial[24] = 0;
     }
     else {
 	memset(cpu_serial_number, 0, sizeof(cpu_serial_number));
