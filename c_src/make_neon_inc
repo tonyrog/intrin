@@ -8,175 +8,333 @@
 
 -mode(compile).
 
-main(Args) ->
-    emit_triple(vadd,d, [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
-    emit_triple(vaddq,q, [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
-    emit_triple(vaddl,l, [s8,s16,s32,u8,u16,u32]),
-    emit_triple(vaddw,w, [s8,s16,s32,u8,u16,u32]),
-    emit_triple(vhadd, d, [s8,s16,s32,u8,u16,u32]),
-    emit_triple(vhaddq, q, [s8,s16,s32,u8,u16,u32]),
-    emit_triple(vrhadd, d, [s8,s16,s32,u8,u16,u32]),
-    emit_triple(vrhaddq, q, [s8,s16,s32,u8,u16,u32]),
-    emit_triple(vqadd, d, [s8,s16,s32,s64,u8,u16,u32,u64]),
-    emit_triple(vqaddq, q, [s8,s16,s32,s64,u8,u16,u32,u64]),
-    emit_triple(vaddhn, n, [s16,s32,s64,u16,u32,u64]),
-    emit_triple(vraddhn, n, [s16,s32,s64,u16,u32,u64]),
+main(_Args) ->
+    emit(vadd, [d,d,d], [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
+    emit(vaddq, [q,q,q], [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
+    emit(vaddl, [q,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vaddw, [qw,qw,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vhadd, [d,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vhaddq, [q,q,q], [s8,s16,s32,u8,u16,u32]),
+    emit(vrhadd, [d,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vrhaddq, [q,q,q], [s8,s16,s32,u8,u16,u32]),
+    emit(vqadd, [d,d,d], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqaddq, [q,q,q], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vaddhn, [n,q,q], [s16,s32,s64,u16,u32,u64]),
+    emit(vraddhn, [n,q,q], [s16,s32,s64,u16,u32,u64]),
     
-    emit_triple(vmul, d, [s8,s16,s32,f32,u8,u16,u32,p8]),
-    emit_triple(vmulq, q, [s8,s16,s32,f32,u8,u16,u32,p8]),
-    %% vqdmulh.t = s16,s32
-    %% vqdmulhq.t = s16,s32
-    %% vqrdmulh.t = s16,s32
-    %% vqrdmulhq.t = s16,s32
-    %% vmull.t = s8,s16,s32,u8,u16,u32, p8
-    %% vqdmull.t = s16,s32
-    %% vmla.t = s8,s16,s32,f32,u8,u16,u32
-    %% vmlaq.t = s8.s16,s32,f32,u8,u16,u32
-    %% vmlal.t = s8,s16,s32,u8,u16,u32
-    %% vqdmlal.t = s16,s32
-    %% vmls.t = s8,s16,s32,f32,u8,u16,u32
-    %% vmlsq.t = s8.s16,s32,f32,u8,u16,u32
-    %% vmlsl.t = s8,s16,s32,u8,u16,u32
-    %% vqdmlsl.t = s16,s32
-    
-    %% vfma.type = f32
-    %% vfmaq.type = f32
-    %% vfms.type = f32
-    %% vfmsq.type = f32
-    %% vrndn.type = f32
-    %% vrndqn.type = f32
-    %% vrnda.type = f32
-    %% vrndqa.type = f32
-    %% vrndp.type = f32
-    %% vrndqp.type = f32
-    %% vrndm.type = f32
-    %% vrndqm.type = f32
-    %% vrnd.type = f32
-    %% vrndq.type = f32
-    
-    %% vsub.t = s8,s16,s32,s64,f32,u8,u16,u32,u64
-    %% vsubq.t = s8,s16,s32,s64,f32,u8,u16,u32,u64
-    %% vsubl.t = s8,s16,s32,u8,u16,u32
-    %% vsubw.t = s8,s16,s32,u8,u16,u32
-    %% vhsub.t = s8,s16,s32,u8,u16,u32
-    %% vhsubq.t = s8,s16,s32,u8,u16,u32
-    %% vqsub.t = s8,s16,s32,s64,u8,u16,u32,u64
-    %% vqsubq.t = s8,s16,s32,s64,u8,u16,u32,u64
-    %% vsubhn.type = s16,s32,s64,u16,u32,u64
-    %% vrsubhn.type = s16,s32,s64,u16,u32,u64
-    %% vceq.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcge.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcle.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcgt.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vclt.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vceqq.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcgeq.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcleq.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcgtq.type = s8,s16,s32,f32,u8,u16,u32,p8
-    %% vcltq.type = s8,s16,s32,f32,u8,u16,u32,p8
+    emit(vmul, [d,d,d], [s8,s16,s32,f32,u8,u16,u32,p8]),
+    emit(vmulq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32,p8]),
+    emit(vqdmulh, [d,d,d], [s16,s32]),
+    emit(vqdmulhq, [q,q,q], [s16,s32]),
+    emit(vqrdmulh, [d,d,d], [s16,s32]),
+    emit(vqrdmulhq, [q,q,q], [s16,s32]),
 
-    %% vcage.f32
-    %% vcageq.f32
-    %% vcale.f32
-    %% vcaleq.f32
-    %% vcagt.f32
-    %% vcagtq.f32
-    %% vcalt.f32
-    %% vcaltq.f32
-    %% vtst.type = s8,s16,s32,u8,u16,u32,p8
-    %% vtstq.type = s8,s16,s32,u8,u16,u32,p8
-    %% vabd.type = s8,s16,s32,f32,u8,u16,u32
-    %% vabdq.type = s8,s16,s32,f32,u8,u16,u32
+    emit(vmull, [l,d,d], [s8,s16,s32,u8,u16,u32,p8]),
+    emit(vqdmull, [l,d,d], [s16,s32]),
+
+    emit(vmla, [d,d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vmlaq, [q,q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vmlal, [l,l,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vqdmlal, [l,l,d,d], [s16,s32]),
+    emit(vmls, [d,d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vmlsq, [q,q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vmlsl, [l,l,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vqdmlsl, [l,l,d,d], [s16,s32]),
+    
+    %% emit(vfma, [d,d,d,d], [f32]),  %% __ARM_FEATURE_FMA
+    %% emit(vfmaq, [q,q,q,q], [f32]), %% __ARM_FEATURE_FMA
+    %% emit(vfms, [d,d,d,d], [f32]),  %% __ARM_FEATURE_FMA
+    %% emit(vfmsq, [q,q,q,q], [f32]), %% __ARM_FEATURE_FMA
+    %% emit(vrndn, [d,d,d,d], [f32]),
+    %% emit(vrndqn, [q], [f32]),
+    %% emit(vrnda, [d,d,d,d], [f32]),
+    %% emit(vrndqa, [q], [f32]),
+    %% emit(vrndp, [q], [f32]),
+    %% emit(vrndqp, [q], [f32]),
+    %% emit(vrndm, [q], [f32]),
+    %% emit(vrndqm, [q], [f32]),
+    %% emit(vrnd, [q], [f32]),
+    %% emit(vrndq, [q], [f32]),
+    
+    emit(vsub,  [d,d,d], [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
+    emit(vsubq, [q,q,q], [s8,s16,s32,s64,f32,u8,u16,u32,u64]),
+    emit(vsubl, [l,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vsubw, [l,l,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vhsub, [d,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vhsubq, [q,q,q], [s8,s16,s32,u8,u16,u32]),
+    emit(vqsub, [d,d,d], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqsubq, [q,q,q], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vsubhn, [n,q,q], [s16,s32,s64,u16,u32,u64]),
+    emit(vrsubhn, [n,q,q], [s16,s32,s64,u16,u32,u64]),
+    emit(vceq, [d,d,d], [s8,s16,s32,f32,u8,u16,u32,p8]),
+    emit(vcge, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vcle, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vcgt, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vclt, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vceqq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32,p8]),
+    emit(vcgeq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vcleq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vcgtq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vcltq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vcage,  [du,d,d], [f32]),
+    emit(vcageq, [qu,q,q], [f32]),
+    emit(vcale,  [du,d,d], [f32]),
+    emit(vcaleq, [qu,q,q], [f32]),
+    emit(vcagt,  [du,d,d], [f32]),
+    emit(vcagtq, [qu,q,q], [f32]),
+    emit(vcalt,  [du,d,d], [f32]),
+    emit(vcaltq, [qu,q,q], [f32]),
+    emit(vtst, [d,d,d], [s8,s16,s32,u8,u16,u32,p8]),
+    emit(vtstq, [q,q,q], [s8,s16,s32,u8,u16,u32,p8]),
+    emit(vabd, [d,d,d],  [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vabdq, [q,q,q], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vabdl, [l,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vaba, [d,d,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vabaq, [q,q,q,q], [s8,s16,s32,u8,u16,u32]),
+    emit(vabal, [l,l,d,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vmax, [d,d,d],  [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vmaxq, [q,q,q],  [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vmin, [d,d,d],  [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vminq, [q,q,q],  [s8,s16,s32,f32,u8,u16,u32]),
+    
+    emit(vpadd, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    
+    emit(vpaddl,  [dw,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vpaddlq, [qw,q], [s8,s16,s32,u8,u16,u32]),
+
+    emit(vpadal, [dw,dw,d], [s8,s16,s32,u8,u16,u32]),
+    emit(vpadalq, [qw,qw,q], [s8,s16,s32,u8,u16,u32]),
+
+    emit(vpmax, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+    emit(vpmin, [d,d,d], [s8,s16,s32,f32,u8,u16,u32]),
+
+    emit(vrecps, [d,d,d], [f32]),
+    emit(vrecpsq, [q,q,q], [f32]),
+    emit(vrsqrts, [d,d,d], [f32]),
+    emit(vrsqrtsq, [q,q,q], [f32]),
+
+    emit(vshl, [d,d,di], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vshlq, [q,q,qi], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vrshl, [d,d,di], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vrshlq, [q,q,qi], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqshl, [d,d,di], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqshlq, [q,q,qi], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqrshl, [d,d,di], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqrshlq, [q,q,qi], [s8,s16,s32,s64,u8,u16,u32,u64]),
+
+    emit(vshr_n, [d,d,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vshrq_n, [q,q,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vrshr_n, [d,d,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vrshrq_n, [q,q,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+
+    emit(vshrn_n, [n,q,ny], [s16,s32,s64,u16,u32,u64]),
+    emit(vrshrn_n, [n,q,ny], [s16,s32,s64,u16,u32,u64]),
+    emit(vqshrn_n, [n,q,ny], [s16,s32,s64,u16,u32,u64]),
+    emit(vqrshrn_n, [n,q,ny], [s16,s32,s64,u16,u32,u64]),
+
+    emit(vqshrun_n, [n,q,ny], [s16,s32,s64]),
+    emit(vqrshrun_n, [n,q,ny], [s16,s32,s64]),
+    
+    emit(vshl_n, [d,d,x], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vshlq_n, [q,q,x], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqshl_n, [d,d,x], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vqshlq_n, [q,q,x], [s8,s16,s32,s64,u8,u16,u32,u64]),
+
+    emit(vqshlu_n, [du,d,x], [s8,s16,s32,s64]),
+    emit(vqshluq_n, [qu,q,x], [s8,s16,s32,s64]),
+
+    emit(vshll_n, [l,d,y], [s8,s16,s32,u8,u16,u32]),
+
+    emit(vsra_n, [d,d,d,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vsraq_n, [q,q,q,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+
+    emit(vrsra_n, [d,d,d,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+    emit(vrsraq_n, [q,q,q,y], [s8,s16,s32,s64,u8,u16,u32,u64]),
+
+    emit(vsri_n, [d,d,d,y], [s8,s16,s32,s64,u8,u16,u32,u64,p8,p16]),
+    emit(vsriq_n, [q,q,q,y], [s8,s16,s32,s64,u8,u16,u32,u64,p8,p16]),
+
+    emit(vsli_n, [d,d,d,x], [s8,s16,s32,s64,u8,u16,u32,u64,p8,p16]),
+    emit(vsliq_n, [q,q,q,x], [s8,s16,s32,s64,u8,u16,u32,u64,p8,p16]),
+
+    emit(vabs, [d, d], [s8, s16, s32, f32]),
+    emit(vabsq, [q, q], [s8, s16, s32, f32]),
+    emit(vqabs, [d, d], [s8, s16, s32]),
+    emit(vqabsq, [q, q], [s8, s16, s32]),
+
+    emit(vneg, [d, d], [s8, s16, s32, f32]),
+    emit(vnegq, [q, q], [s8, s16, s32, f32]),
+    emit(vqneg, [d, d], [s8, s16, s32]),
+    emit(vqnegq, [q, q], [s8, s16, s32]),
+
+    emit(vmvn, [d, d], [s8,s16,s32,u8,u16,u32,p8]),
+    emit(vmvnq, [q, q], [s8,s16,s32,u8,u16,u32,p8]),
+
+    emit(vcls, [d, d], [s8,s16,s32]),
+    emit(vclsq, [q, q], [s8,s16,s32]),
+
+    emit(vclz, [d, d], [s8,s16,s32,u8,u16,u32]),
+    emit(vclzq, [q, q], [s8,s16,s32,u8,u16,u32]),
+
+    emit(vcnt, [d, d], [s8,u8,p8]),
+    emit(vcntq, [q, q], [s8,u8,p8]),
+
+    emit(vrecpe, [d,d], [f32,u32]),
+    emit(vrecpeq, [q,q], [f32,u32]),
+
+    emit(vrsqrte, [d,d], [f32,u32]),
+    emit(vrsqrteq, [q,q], [f32,u32]),
+
     halt(0).
 
 
-emit_triple(Instr,Form,Elems) ->
-    T = form_char(Form),
+emit(Instr,Ts,Elems) ->
     io:format("// ~s.t = ~w\n", [string:to_upper(atom_to_list(Instr)), Elems]),
     _ = [begin
-	     {D,Dt} = case Form of
-			  d -> {"D",elem_to_type(E,d)};
-			  q -> {"Q",elem_to_type(E,q)};
-			  l -> {"Q",elem_to_type(E,l)};
-			  w -> {"Q",elem_to_type(E,l)};
-			  n -> {"D",elem_to_type(E,n)}
-		      end,
-	     {N,Nt} = case Form of
-			  l -> {"D",elem_to_type(E,d)};
-			  w -> {"Q",elem_to_type(E,l)};
-			  n -> {"Q",elem_to_type(E,q)};
-			  _ -> {T, elem_to_type(E,Form)}
-		      end,
-	     {M,Mt} = case Form of
-			  l -> {"D",elem_to_type(E,d)};
-			  w -> {"D",elem_to_type(E,d)};
-			  n -> {"Q",elem_to_type(E,q)};
-			  _ -> {T, elem_to_type(E,Form)}
-		      end,
-	     io:format("DEF_void_~sd_~sn_~sm(_, ~s_~s, ~s, ~s, ~s).\n",
-		       [D,N,M, Instr, E, 
-			Dt, Nt, Mt])
+	     TypeList = [ elem_to_type(E,T) || T <- Ts],
+	     SigList = [ elem_to_sig(T) || T <- Ts],
+	     io:format("op_~s(~s_~s,~s)\n",
+		       [string:join(SigList, ""), 
+			Instr, E, 
+			string:join(TypeList, ",")])
 	 end || E <- Elems].
 
-form_char(d) -> "D";
-form_char(q) -> "Q";
-form_char(l) -> "D";
-form_char(w) -> "W";
-form_char(n) -> "N".
-    
+elem_to_sig(d)  -> "D";
+elem_to_sig(di) -> "D";
+elem_to_sig(dw) -> "D";
+elem_to_sig(du) -> "D";
+elem_to_sig(n)  -> "D";
+elem_to_sig(q)  -> "Q";
+elem_to_sig(qw) -> "Q";
+elem_to_sig(qu) -> "Q";
+elem_to_sig(qi) -> "Q";
+elem_to_sig(l)  -> "Q";
+elem_to_sig(y)  -> "z";
+elem_to_sig(ny) -> "z";
+elem_to_sig(x)  -> "z".
 
-elem_to_type(s8,d) -> "int8x8_t";
-elem_to_type(s8,q) -> "int8x16_t";
-elem_to_type(s8,l) -> "int16x8_t";
+%% elem_to_uint(f32,d) -> "uint32x2_t";
+%% elem_to_uint(f32,q) -> "uint32x4_t".
+
+elem_to_type(s8,  y)  -> "y8";
+elem_to_type(s16, y)  -> "y16";
+elem_to_type(s32, y)  -> "y32";
+elem_to_type(s64, y)  -> "y64";
+elem_to_type(u8,  y)  -> "y8";
+elem_to_type(u16, y)  -> "y16";
+elem_to_type(u32, y)  -> "y32";
+elem_to_type(u64, y)  -> "y64";
+elem_to_type(p8,  y)  -> "y8";
+elem_to_type(p16,  y)  -> "y16";
+
+elem_to_type(s16, ny)  -> "y8";
+elem_to_type(s32, ny)  -> "y16";
+elem_to_type(s64, ny)  -> "y32";
+elem_to_type(u16, ny)  -> "y8";
+elem_to_type(u32, ny)  -> "y16";
+elem_to_type(u64, ny)  -> "y32";
+
+elem_to_type(s8,x)  -> "x8";
+elem_to_type(s16,x) -> "x16";
+elem_to_type(s32,x) -> "x32";
+elem_to_type(s64,x) -> "x64";
+elem_to_type(u8,x)  -> "x8";
+elem_to_type(u16,x) -> "x16";
+elem_to_type(u32,x) -> "x32";
+elem_to_type(u64,x) -> "x64";
+elem_to_type(p8,x) -> "x8";
+elem_to_type(p16,x) -> "x16";
+
+elem_to_type(s8,d)  -> "int8x8_t";
+elem_to_type(s8,di)  -> "int8x8_t";
+elem_to_type(s8,dw) -> "int16x4_t";
+elem_to_type(s8,du)  -> "uint8x8_t";
+elem_to_type(s8,q)  -> "int8x16_t";
+elem_to_type(s8,qi)  -> "int8x16_t";
+elem_to_type(s8,qw) -> "int16x8_t";
+elem_to_type(s8,qu)  -> "uint8x16_t";
+elem_to_type(s8,l)  -> "int16x8_t";
 
 elem_to_type(s16,d) -> "int16x4_t";
+elem_to_type(s16,di) -> "int16x4_t";
+elem_to_type(s16,dw) -> "int32x2_t";
+elem_to_type(s16,du) -> "uint16x4_t";
 elem_to_type(s16,q) -> "int16x8_t";
+elem_to_type(s16,qi) -> "int16x8_t";
+elem_to_type(s16,qw) -> "int32x4_t";
+elem_to_type(s16,qu) -> "uint16x8_t";
 elem_to_type(s16,l) -> "int32x4_t";
 elem_to_type(s16,n) -> "int8x8_t";
 
 elem_to_type(s32,d) -> "int32x2_t";
+elem_to_type(s32,di) -> "int32x2_t";
+elem_to_type(s32,dw) -> "int64x1_t";
+elem_to_type(s32,du) -> "uint32x2_t";
 elem_to_type(s32,q) -> "int32x4_t";
+elem_to_type(s32,qi) -> "int32x4_t";
+elem_to_type(s32,qw) -> "int64x2_t";
+elem_to_type(s32,qu) -> "uint32x4_t";
 elem_to_type(s32,l) -> "int64x2_t";
 elem_to_type(s32,n) -> "int16x4_t";
 
 elem_to_type(s64,d) -> "int64x1_t";
+elem_to_type(s64,di) -> "int64x1_t";
+elem_to_type(s64,du) -> "uint64x1_t";
 elem_to_type(s64,q) -> "int64x2_t";
+elem_to_type(s64,qi) -> "int64x2_t";
+elem_to_type(s64,qu) -> "uint64x2_t";
 elem_to_type(s64,n) -> "int32x2_t";
 
-elem_to_type(u8,d) -> "uint8x8_t";
-elem_to_type(u8,q) -> "uint8x16_t";
-elem_to_type(u8,l) -> "uint16x8_t";
+elem_to_type(u8,d)  -> "uint8x8_t";
+elem_to_type(u8,di)  -> "int8x8_t";
+elem_to_type(u8,dw) -> "uint16x4_t";
+elem_to_type(u8,du)  -> "uint8x8_t";
+elem_to_type(u8,q)  -> "uint8x16_t";
+elem_to_type(u8,qi)  -> "int8x16_t";
+elem_to_type(u8,qw) -> "uint16x8_t";
+elem_to_type(u8,qu)  -> "uint8x16_t";
+elem_to_type(u8,l)  -> "uint16x8_t";
 
-elem_to_type(u16,d) -> "uint16x4_t";
-elem_to_type(u16,q) -> "uint16x8_t";
-elem_to_type(u16,l) -> "uint32x4_t";
-elem_to_type(u16,n) -> "uint8x8_t";
+elem_to_type(u16,d)  -> "uint16x4_t";
+elem_to_type(u16,di)  -> "int16x4_t";
+elem_to_type(u16,dw) -> "uint32x2_t";
+elem_to_type(u16,du)  -> "uint16x4_t";
+elem_to_type(u16,q)  -> "uint16x8_t";
+elem_to_type(u16,qi)  -> "int16x8_t";
+elem_to_type(u16,qw) -> "uint32x4_t";
+elem_to_type(u16,qu)  -> "uint16x8_t";
+elem_to_type(u16,l)  -> "uint32x4_t";
+elem_to_type(u16,n)  -> "uint8x8_t";
 
 elem_to_type(u32,d) -> "uint32x2_t";
+elem_to_type(u32,di) -> "int32x2_t";
+elem_to_type(u32,dw) -> "uint64x1_t";
+elem_to_type(u32,du) -> "uint32x2_t";
 elem_to_type(u32,q) -> "uint32x4_t";
+elem_to_type(u32,qi) -> "int32x4_t";
+elem_to_type(u32,qw) -> "uint64x2_t";
+elem_to_type(u32,qu) -> "uint32x4_t";
 elem_to_type(u32,l) -> "uint64x2_t";
 elem_to_type(u32,n) -> "uint16x4_t";
 
 elem_to_type(u64,d) -> "uint64x1_t";
+elem_to_type(u64,di) -> "int64x1_t";
+elem_to_type(u64,du) -> "uint64x1_t";
 elem_to_type(u64,q) -> "uint64x2_t";
+elem_to_type(u64,qi) -> "int64x2_t";
+elem_to_type(u64,qu) -> "uint64x2_t";
 elem_to_type(u64,n) -> "uint32x2_t";
 
 elem_to_type(f32,d) -> "float32x2_t";
 elem_to_type(f32,q) -> "float32x4_t";
+elem_to_type(f32,du) -> "uint32x2_t";
+elem_to_type(f32,qu) -> "uint32x4_t";
 
 elem_to_type(p8,d) -> "poly8x8_t";
 elem_to_type(p8,q) -> "poly8x16_t";
+elem_to_type(p8,qw) -> "poly16x8_t";
+elem_to_type(p8,l) -> "poly16x8_t";
 
 elem_to_type(p16,d) -> "poly16x4_t";
 elem_to_type(p16,q) -> "poly16x8_t";
 elem_to_type(no,no) -> no.
-
-
-
-
-    
-
-
-
-
-    

@@ -9,25 +9,25 @@
 
 -on_load(init/0).
 
-#define DEF_void_MMd_MMs(pfx,nm,dt,st) \
+#define op_MM(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_MMd(pfx,nm,dt) \
+#define op_M(pfx,nm,dt) \
 -export([nm/1]).
-#define DEF_bool_MMd_MMs(pfx,nm,dt,st) \
+#define bool_MM(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_MMd_imm8(pfx,nm,dt,vt) \
+#define op_My(pfx,nm,dt,vt) \
 -export([nm/2]).
-#define DEF_void_XMMd_XMMs1(pfx,nm,st) \
+#define op_XX1(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_XMMd_XMMs(pfx,nm,dt,st) \
+#define op_XX(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_XMMd(pfx,nm,dt) \
+#define op_X(pfx,nm,dt) \
 -export([nm/1]).
-#define DEF_bool_XMMd_XMMs(pfx,nm,dt,st) \
+#define bool_XX(pfx,nm,dt,st) \
 -export([nm/2]).
-#define DEF_void_XMMd_imm8(pfx,nm,dt,vt) \
+#define op_Xy(pfx,nm,dt,vt) \
 -export([nm/2]).
-#define DEF_void_XMMd_XMMs_imm8(pfx,nm,dt,st,vt) \
+#define op_XXy(pfx,nm,dt,st,vt) \
 -export([nm/3]).
 
 #include "mmx.inc"
@@ -44,41 +44,41 @@
 
 -export([info/1]).
 
-#undef DEF_void_XMMd_XMMs1
-#undef DEF_void_XMMd_XMMs
-#undef DEF_void_XMMd
-#undef DEF_bool_XMMd_XMMs
-#undef DEF_void_XMMd_imm8
-#undef DEF_void_XMMd_XMMs_imm8
-#undef DEF_void_MMd_MMs
-#undef DEF_void_MMd
-#undef DEF_bool_MMd_MMs
-#undef DEF_void_MMd_imm8
+#undef op_XX1
+#undef op_XX
+#undef op_X
+#undef bool_XX
+#undef op_Xy
+#undef op_XXy
+#undef op_MM
+#undef op_M
+#undef bool_MM
+#undef op_My
 
 init() ->
     Nif = filename:join([code:priv_dir(intrin),"x86_nif"]),
     erlang:load_nif(Nif, 0).
 
-#define DEF_void_XMMd_XMMs1(pfx,nm,dt) \
+#define op_XX1(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd_XMMs(pfx,nm,dt,st) \
+#define op_XX(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_bool_XMMd_XMMs(pfx,nm,dt,st) \
+#define bool_XX(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd_imm8(pfx,nm,dt,vt) \
+#define op_Xy(pfx,nm,dt,vt) \
 nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd_XMMs_imm8(pfx,nm,dt,st,vt) \
+#define op_XXy(pfx,nm,dt,st,vt) \
 nm(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
-#define DEF_void_XMMd(pfx,nm,dt) \
+#define op_X(pfx,nm,dt) \
 nm(_Dst) -> erlang:error(nif_not_loaded).
 
-#define DEF_void_MMd_MMs(pfx,nm,dt,st) \
+#define op_MM(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_bool_MMd_MMs(pfx,nm,dt,st) \
+#define bool_MM(pfx,nm,dt,st) \
 nm(_Dst,_Src) -> erlang:error(nif_not_loaded).
-#define DEF_void_MMd_imm8(pfx,nm,dt,vt) \
+#define op_My(pfx,nm,dt,vt) \
 nm(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-#define DEF_void_MMd(pfx,nm,dt) \
+#define op_M(pfx,nm,dt) \
 nm(_Dst) -> erlang:error(nif_not_loaded).
 
 #include "mmx.inc"

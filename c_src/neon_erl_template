@@ -9,21 +9,39 @@
 
 -on_load(init/0).
 
-#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm) \
+#define op_DD(nm,dd,dn) \
+-export([nm/2]).
+#define op_QQ(nm,qd,qn) \
+-export([nm/2]).
+#define op_QD(nm,qd,dn) \
+-export([nm/2]).
+#define op_DDD(nm,dd,dn,dm) \
 -export([nm/3]).
-#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm) \
+#define op_DDz(nm,dd,dn,z) \
 -export([nm/3]).
-#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm) \
+#define op_DQz(nm,dd,dn,z) \
 -export([nm/3]).
-#define DEF_void_Qd_Qn_Dm(nm,qd,dn,dm) \
+#define op_QQQ(nm,qd,qn,qm) \
 -export([nm/3]).
-#define DEF_void_Dd_Qn_Qm(nm,dd,qn,qm) \
+#define op_QQz(nm,qd,qn,z) \
 -export([nm/3]).
-#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk) \
+#define op_QDz(nm,qd,dn,z) \
+-export([nm/3]).
+#define op_QQD(nm,qd,dn,dm) \
+-export([nm/3]).
+#define op_QDD(nm,qd,dn,dm) \
+-export([nm/3]).
+#define op_DQQ(nm,dd,qn,qm) \
+-export([nm/3]).
+#define op_DDDD(nm,dd,dn,dm,dk) \
 -export([nm/4]).
-#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,dk) \
+#define op_DDDz(nm,dd,dn,dm,z) \
 -export([nm/4]).
-#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk) \
+#define op_QQQQ(nm,qd,qn,qm,dk) \
+-export([nm/4]).
+#define op_QQQz(nm,qd,qn,qm,z) \
+-export([nm/4]).
+#define op_QQDD(nm,qd,qn,dm,dk) \
 -export([nm/4]).
 
 #include "neon.inc"
@@ -35,33 +53,61 @@
 
 -export([info/1]).
 
-#undef DEF_void_Dd_Dn_Dm
-#undef DEF_void_Qd_Qn_Qm
-#undef DEF_void_Qd_Dn_Dm
-#undef DEF_void_Qd_Qn_Dm
-#undef DEF_void_Dd_Qn_Qm
-#undef DEF_void_Dd_Dn_Dm_Dk
-#undef DEF_void_Qd_Qn_Qm_Qk
-#undef DEF_void_Qd_Qn_Dm_Dk
+#undef op_DD
+#undef op_QQ
+#undef op_QD
+#undef op_DDD
+#undef op_DDz
+#undef op_DQz
+#undef op_QQQ
+#undef op_QQz
+#undef op_QDz
+#undef op_QQz
+#undef op_QDD
+#undef op_QQD
+#undef op_DQQ
+#undef op_DDDD
+#undef op_DDDz
+#undef op_QQQQ
+#undef op_QQQz
+#undef op_QQDD
 
 init() ->
     Nif = filename:join([code:priv_dir(intrin),"neon_nif"]),
     erlang:load_nif(Nif, 0).
-#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm) \
+#define op_DD(nm,dd,dn) \
+nm(_D,_N) -> erlang:error(nif_not_loaded).
+#define op_QQ(nm,qd,qn) \
+nm(_D,_N) -> erlang:error(nif_not_loaded).
+#define op_QD(nm,qd,dn) \
+nm(_D,_N) -> erlang:error(nif_not_loaded).
+#define op_DDD(nm,dd,dn,dm) \
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
-#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm) \
+#define op_DDz(nm,dd,dn,z) \
+nm(_D,_N,_Z) -> erlang:error(nif_not_loaded).
+#define op_DQz(nm,dd,dn,z) \
+nm(_D,_N,_Z) -> erlang:error(nif_not_loaded).
+#define op_QQQ(nm,qd,qn,qm) \
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
-#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm) \
+#define op_QQz(nm,qd,qn,z) \
+nm(_D,_N,_Z) -> erlang:error(nif_not_loaded).
+#define op_QDz(nm,qd,dn,z) \
+nm(_D,_N,_Z) -> erlang:error(nif_not_loaded).
+#define op_QDD(nm,qd,dn,dm) \
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
-#define DEF_void_Qd_Qn_Dm(nm,qd,dn,dm) \
+#define op_QQD(nm,qd,dn,dm) \
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
-#define DEF_void_Dd_Qn_Qm(nm,dd,qn,qm) \
+#define op_DQQ(nm,dd,qn,qm) \
 nm(_D,_N,_M) -> erlang:error(nif_not_loaded).
-#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk) \
+#define op_DDDD(nm,dd,dn,dm,dk) \
 nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
-#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,qk) \
+#define op_DDDz(nm,dd,dn,dm,z) \
+nm(_D,_N,_M,_Z) -> erlang:error(nif_not_loaded).
+#define op_QQQQ(nm,qd,qn,qm,qk) \
 nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
-#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk) \
+#define op_QQQz(nm,qd,qn,qm,z) \
+nm(_D,_N,_M,_Z) -> erlang:error(nif_not_loaded).
+#define op_QQDD(nm,qd,qn,dm,dk) \
 nm(_D,_N,_M,_K) -> erlang:error(nif_not_loaded).
 
 #include "neon.inc"

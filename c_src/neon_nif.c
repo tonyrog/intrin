@@ -11,9 +11,9 @@
 #include "neon_util.h"
 #include "neon_cpuid.h"
 
-#define PFX nif_neon_
-
 #if defined(__arm__)
+// Always compile, but we must check this feature in runtime!
+#define __ARM_FEATURE_FMA
 #include <arm_neon.h>
 #endif
 
@@ -251,8 +251,80 @@ static ERL_NIF_TERM nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 
 #if defined(__arm__)
 
-#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm)				\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define iop1(op,dt,d,s,x) case (x): (d)=(dt)op((s),(x)); break
+#define iop2(op,dt,d,s,x) iop1(op,dt,d,s,x); iop1(op,dt,d,s,(x)+1)
+#define iop4(op,dt,d,s,x) iop2(op,dt,d,s,x); iop2(op,dt,d,s,(x)+2)
+#define iop8(op,dt,d,s,x) iop4(op,dt,d,s,x); iop4(op,dt,d,s,(x)+4)
+#define iop16(op,dt,d,s,x) iop8(op,dt,d,s,x); iop8(op,dt,d,s,(x)+8)
+#define iop32(op,dt,d,s,x) iop16(op,dt,d,s,x); iop16(op,dt,d,s,(x)+16)
+#define iop64(op,dt,d,s,x) iop32(op,dt,d,s,x); iop32(op,dt,d,s,(x)+32)
+
+#define op_x8(op,dt,d,s)  iop8(op,dt,d,s,0)
+#define op_x16(op,dt,d,s) iop16(op,dt,d,s,0)
+#define op_x32(op,dt,d,s) iop32(op,dt,d,s,0)
+#define op_x64(op,dt,d,s) iop64(op,dt,d,s,0)
+
+#define op_y8(op,dt,d,s)  iop8(op,dt,d,s,1)
+#define op_y16(op,dt,d,s) iop16(op,dt,d,s,1)
+#define op_y32(op,dt,d,s) iop32(op,dt,d,s,1)
+#define op_y64(op,dt,d,s) iop64(op,dt,d,s,1)
+
+#define iop1_2(op,dt,d,s1,s2,x) case (x): (d)=(dt)op((s1),(s2),(x)); break
+#define iop2_2(op,dt,d,s1,s2,x) \
+  iop1_2(op,dt,d,s1,s2,x); iop1_2(op,dt,d,s1,s2,(x)+1)
+#define iop4_2(op,dt,d,s1,s2,x) \
+  iop2_2(op,dt,d,s1,s2,x); iop2_2(op,dt,d,s1,s2,(x)+2)
+#define iop8_2(op,dt,d,s1,s2,x) \
+  iop4_2(op,dt,d,s1,s2,x); iop4_2(op,dt,d,s1,s2,(x)+4)
+#define iop16_2(op,dt,d,s1,s2,x) \
+  iop8_2(op,dt,d,s1,s2,x); iop8_2(op,dt,d,s1,s2,(x)+8)
+#define iop32_2(op,dt,d,s1,s2,x) \
+  iop16_2(op,dt,d,s1,s2,x); iop16_2(op,dt,d,s1,s2,(x)+16)
+#define iop64_2(op,dt,d,s1,s2,x) \
+  iop32_2(op,dt,d,s1,s2,x); iop32_2(op,dt,d,s1,s2,(x)+32)
+
+#define op_x8_2(op,dt,d,s1,s2)  iop8_2(op,dt,d,s1,s2,0)
+#define op_x16_2(op,dt,d,s1,s2) iop16_2(op,dt,d,s1,s2,0)
+#define op_x32_2(op,dt,d,s1,s2) iop32_2(op,dt,d,s1,s2,0)
+#define op_x64_2(op,dt,d,s1,s2) iop64_2(op,dt,d,s1,s2,0)
+
+#define op_y8_2(op,dt,d,s1,s2)  iop8_2(op,dt,d,s1,s2,1)
+#define op_y16_2(op,dt,d,s1,s2) iop16_2(op,dt,d,s1,s2,1)
+#define op_y32_2(op,dt,d,s1,s2) iop32_2(op,dt,d,s1,s2,1)
+#define op_y64_2(op,dt,d,s1,s2) iop64_2(op,dt,d,s1,s2,1)
+
+#define op_DD(nm,dd,dn)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n;							\
+    if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    dreg[d] = (int8x8_t) nm((dn)dreg[n]);				\
+    return ATOM(ok);							\
+}
+
+#define op_QQ(nm,qd,qn)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n;							\
+    if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_qreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    qreg[d] = (int8x16_t) nm((qn)qreg[n]);		\
+    return ATOM(ok);							\
+}
+
+#define op_QD(nm,qd,dn)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n;							\
+    if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    qreg[d] = (int8x16_t) nm((dn)dreg[n]);		\
+    return ATOM(ok);							\
+}
+
+#define op_DDD(nm,dd,dn,dm)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m;							\
     if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -260,10 +332,38 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_dreg(env, argv[2], &m)) return enif_make_badarg(env);	\
     dreg[d] = (int8x8_t) nm((dn)dreg[n], (dm)dreg[m]);		\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm)				\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_DDz(nm,dd,dn,z)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n, i;							\
+    if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    if (!enif_get_int(env, argv[2], &i))return enif_make_badarg(env);	\
+    switch(i) {								\
+      op##_##z(nm,int8x8_t,dreg[d],(dn)dreg[n]);			\
+    default: return enif_make_badarg(env);				\
+    }									\
+    return ATOM(ok);							\
+}
+
+#define op_DQz(nm,dd,qn,z)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n, i;							\
+    if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    if (!enif_get_int(env, argv[2], &i))return enif_make_badarg(env);	\
+    switch(i) {								\
+      op##_##z(nm,int8x8_t,dreg[d],(qn)qreg[n]);			\
+    default: return enif_make_badarg(env);				\
+    }									\
+    return ATOM(ok);							\
+}
+
+#define op_QQQ(nm,qd,qn,qm)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m;							\
     if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -271,10 +371,39 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_qreg(env, argv[2], &m)) return enif_make_badarg(env);	\
     qreg[d] = (int8x16_t) nm((qn)qreg[n], (qm)qreg[m]);		\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm)				\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_QDz(nm,qd,dn,z)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n, i;							\
+    if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    if (!enif_get_int(env, argv[2], &i)) return enif_make_badarg(env);	\
+    switch(i) {								\
+      op##_##z(nm,int8x16_t,qreg[d],(dn)dreg[n]);			\
+    default: return enif_make_badarg(env);				\
+    }									\
+    return ATOM(ok);							\
+}
+
+
+#define op_QQz(nm,qd,qn,z)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n, i;							\
+    if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_qreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    if (!enif_get_int(env, argv[2], &i)) return enif_make_badarg(env);	\
+    switch(i) {								\
+      op##_##z(nm,int8x16_t,qreg[d],(qn)qreg[n]);			\
+    default: return enif_make_badarg(env);				\
+    }									\
+    return ATOM(ok);							\
+}
+
+#define op_QDD(nm,qd,dn,dm)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m;							\
     if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -282,10 +411,10 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_dreg(env, argv[2], &m)) return enif_make_badarg(env);	\
     qreg[d] = (int8x16_t) nm((dn)dreg[n], (dm)dreg[m]);		\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Qd_Qn_Dm(nm,qd,qn,dm)				\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_QQD(nm,qd,qn,dm)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m;							\
     if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -293,10 +422,10 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_dreg(env, argv[2], &m)) return enif_make_badarg(env);	\
     qreg[d] = (int8x16_t) nm((qn)qreg[n], (dm)dreg[m]);		\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Dd_Qn_Qm(nm,qd,qn,qm)				\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_DQQ(nm,qd,qn,qm)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m;							\
     if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -304,10 +433,10 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_qreg(env, argv[2], &m)) return enif_make_badarg(env);	\
     dreg[d] = (int8x8_t) nm((qn)qreg[n], (qm)qreg[m]);		\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk)			\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_DDDD(nm,dd,dn,dm,dk)			\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m, k;							\
     if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -316,10 +445,25 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_dreg(env, argv[3], &k)) return enif_make_badarg(env);	\
     dreg[d] = (int8x8_t) nm((dn)dreg[n], (dm)dreg[m], (dk)dreg[k]);	\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,qk)			\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_DDDz(nm,dd,dn,dm,z)			\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n, m, i;							\
+    if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    if (!get_dreg(env, argv[2], &m)) return enif_make_badarg(env);	\
+    if (!enif_get_int(env, argv[3], &i))return enif_make_badarg(env);	\
+    switch(i) {								\
+      op##_##z##_2(nm,int8x8_t,dreg[d],(dn)dreg[n],(dm)dreg[m]);	\
+    default: return enif_make_badarg(env);				\
+    }									\
+    return ATOM(ok);							\
+}
+
+#define op_QQQQ(nm,qd,qn,qm,qk)			\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m, k;							\
     if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -328,10 +472,25 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_qreg(env, argv[3], &k)) return enif_make_badarg(env);	\
     qreg[d] = (int8x16_t) nm((qn)qreg[n], (qm)qreg[m],(qk)qreg[k]);	\
     return ATOM(ok);							\
-}									\
+}
 
-#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk)			\
-static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+#define op_QQQz(nm,qd,qn,qm,z)			\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n, m, i;							\
+    if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_qreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    if (!get_qreg(env, argv[2], &m)) return enif_make_badarg(env);	\
+    if (!enif_get_int(env, argv[3], &i))return enif_make_badarg(env);	\
+    switch(i) {								\
+      op##_##z##_2(nm,int8x16_t,qreg[d],(qn)qreg[n],(qm)qreg[m]);	\
+    default: return enif_make_badarg(env);				\
+    }									\
+    return ATOM(ok);							\
+}
+
+#define op_QQDD(nm,qd,qn,dm,dk)			\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
     int d, n, m, k;							\
     if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
@@ -340,18 +499,28 @@ static ERL_NIF_TERM PFX##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!get_dreg(env, argv[3], &k)) return enif_make_badarg(env);	\
     qreg[d] = (int8x16_t) nm((qn)qreg[n], (dm)dreg[m],(dk)dreg[k]);	\
     return ATOM(ok);							\
-}									\
+}
 
 #else
 
-#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Qd_Qn_Dm(nm,qd,dn,dm) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Dd_Qn_Qm(nm,qd,qn,qm) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,qk) NOT_SUPPORTED(PFX##nm)
-#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk) NOT_SUPPORTED(PFX##nm)
+#define op_DD(nm,dd,dn) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQ(nm,qd,qn) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QD(nm,qd,dn) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DDD(nm,dd,dn,dm) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DDz(nm,dd,dn,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DQz(nm,dd,dn,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQQ(nm,qd,qn,qm) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQz(nm,qd,qn,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QDz(nm,qd,dn,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQz(nm,qd,qn,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QDD(nm,qd,dn,dm) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQD(nm,qd,dn,dm) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DQQ(nm,qd,qn,qm) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DDDD(nm,dd,dn,dm,dk) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DDDz(nm,dd,dn,dm,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQQQ(nm,qd,qn,qm,qk) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQQz(nm,qd,qn,qm,z) NOT_SUPPORTED(nif_neon_##nm)
+#define op_QQDD(nm,qd,qn,dm,dk) NOT_SUPPORTED(nif_neon_##nm)
 
 #endif
 
@@ -467,23 +636,43 @@ static ERL_NIF_TERM vld(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     return ATOM(error);
 }
 
-#undef DEF_void_Dd_Dn_Dm
-#undef DEF_void_Qd_Qn_Qm
-#undef DEF_void_Qd_Dn_Dm
-#undef DEF_void_Qd_Qn_Dm
-#undef DEF_void_Dd_Qn_Qm
-#undef DEF_void_Dd_Dn_Dm_Dk
-#undef DEF_void_Qd_Qn_Qm_Qk
-#undef DEF_void_Qd_Qn_Dm_Dk
+#undef op_DD
+#undef op_QQ
+#undef op_QD
+#undef op_DDD
+#undef op_DDz
+#undef op_DQz
+#undef op_QQQ
+#undef op_QQz
+#undef op_QDz
+#undef op_QQz
+#undef op_QDD
+#undef op_QQD
+#undef op_DQQ
+#undef op_DDDD
+#undef op_DDDz
+#undef op_QQQQ
+#undef op_QQQz
+#undef op_QQDD
 
-#define DEF_void_Dd_Dn_Dm(nm,dd,dn,dm)  { #nm, 3, PFX##nm },
-#define DEF_void_Qd_Qn_Qm(nm,qd,qn,qm)  { #nm, 3, PFX##nm },
-#define DEF_void_Qd_Dn_Dm(nm,qd,dn,dm)  { #nm, 3, PFX##nm },
-#define DEF_void_Qd_Qn_Dm(nm,qd,dn,dm)  { #nm, 3, PFX##nm },
-#define DEF_void_Dd_Qn_Qm(nm,qd,qn,qm)  { #nm, 3, PFX##nm },
-#define DEF_void_Dd_Dn_Dm_Dk(nm,dd,dn,dm,dk)  { #nm, 4, PFX##nm },
-#define DEF_void_Qd_Qn_Qm_Qk(nm,qd,qn,qm,qk)  { #nm, 4, PFX##nm },
-#define DEF_void_Qd_Qn_Dm_Dk(nm,qd,qn,dm,dk)  { #nm, 4, PFX##nm },
+#define op_DD(nm,dd,dn)  { #nm, 2, nif_neon_##nm },
+#define op_QQ(nm,qd,qn)  { #nm, 2, nif_neon_##nm },
+#define op_QD(nm,qd,dn)  { #nm, 2, nif_neon_##nm },
+#define op_DDD(nm,dd,dn,dm)  { #nm, 3, nif_neon_##nm },
+#define op_DDz(nm,dd,dn,z)  { #nm, 3, nif_neon_##nm },
+#define op_DQz(nm,dd,dn,z)  { #nm, 3, nif_neon_##nm },
+#define op_QQQ(nm,qd,qn,qm)  { #nm, 3, nif_neon_##nm },
+#define op_QQz(nm,qd,qn,z)  { #nm, 3, nif_neon_##nm },
+#define op_QDz(nm,qd,qn,z)  { #nm, 3, nif_neon_##nm },
+#define op_QQz(nm,qd,qn,z)  { #nm, 3, nif_neon_##nm },
+#define op_QDD(nm,qd,dn,dm)  { #nm, 3, nif_neon_##nm },
+#define op_QQD(nm,qd,dn,dm)  { #nm, 3, nif_neon_##nm },
+#define op_DQQ(nm,qd,qn,qm)  { #nm, 3, nif_neon_##nm },
+#define op_DDDD(nm,dd,dn,dm,dk)  { #nm, 4, nif_neon_##nm },
+#define op_DDDz(nm,dd,dn,dm,z)  { #nm, 4, nif_neon_##nm },
+#define op_QQQQ(nm,qd,qn,qm,qk)  { #nm, 4, nif_neon_##nm },
+#define op_QQQz(nm,qd,qn,qm,z)  { #nm, 4, nif_neon_##nm },
+#define op_QQDD(nm,qd,qn,dm,dk)  { #nm, 4, nif_neon_##nm },
 
 static ErlNifFunc nif_funcs[] = {
 #include "neon.inc"
