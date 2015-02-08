@@ -151,7 +151,7 @@ neon_blend(Src, Dst) ->
     T16 = q1, T16H = d2, T16L = d1,
     A16 = q2,
     S16 = q3, S16H = d6, S16L = d7,
-    D16 = q4, D16H = d8, D16H = d9,
+    D16 = q4, %% D16H = d8, D16L = d9,
     L16 = q5, H16 = q6,
     
     %% LOW 64
