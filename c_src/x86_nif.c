@@ -76,8 +76,11 @@ typedef uint8_t vector64_t __attribute__ ((vector_size (VSIZE64)));
 #define m128i_imm8_opx256(op,v,imm8) \
     m128i_imm8_opx128(op,v,imm8); m128i_imm8_opx128(op,v,imm8+128)
 
+#ifdef __x86_64__
+#define NUM_XMM_REGS 16
+#else
 #define NUM_XMM_REGS 8
-// fixme 16 for x86_64?
+#endif
 
 #ifdef __SSE2__
 // paramterized shuffle functions
@@ -171,8 +174,14 @@ DECL_ATOM(xmm4);
 DECL_ATOM(xmm5);
 DECL_ATOM(xmm6);
 DECL_ATOM(xmm7);
-
-// FIXME xmm8 - xmm15  for x86_64?
+DECL_ATOM(xmm8);
+DECL_ATOM(xmm9);
+DECL_ATOM(xmm10);
+DECL_ATOM(xmm11);
+DECL_ATOM(xmm12);
+DECL_ATOM(xmm13);
+DECL_ATOM(xmm14);
+DECL_ATOM(xmm15);
 
 DECL_ATOM(cpu_features);
 DECL_ATOM(cpu_vendor_name);
@@ -201,6 +210,14 @@ int get_xmm(ErlNifEnv* env, const ERL_NIF_TERM term, int* value)
 	else if (term == ATOM(xmm5)) r = 5;
 	else if (term == ATOM(xmm6)) r = 6;
 	else if (term == ATOM(xmm7)) r = 7;
+	else if (term == ATOM(xmm8)) r = 8;
+	else if (term == ATOM(xmm9)) r = 9;
+	else if (term == ATOM(xmm10)) r = 10;
+	else if (term == ATOM(xmm11)) r = 11;
+	else if (term == ATOM(xmm12)) r = 12;
+	else if (term == ATOM(xmm13)) r = 13;
+	else if (term == ATOM(xmm14)) r = 14;
+	else if (term == ATOM(xmm15)) r = 15;
 	else return 0;
     }
     if ((r < 0) || (r >= NUM_XMM_REGS))
@@ -618,6 +635,14 @@ static int atload(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info)
     LOAD_ATOM(xmm5);
     LOAD_ATOM(xmm6);
     LOAD_ATOM(xmm7);
+    LOAD_ATOM(xmm8);
+    LOAD_ATOM(xmm9);
+    LOAD_ATOM(xmm10);
+    LOAD_ATOM(xmm11);
+    LOAD_ATOM(xmm12);
+    LOAD_ATOM(xmm13);
+    LOAD_ATOM(xmm14);
+    LOAD_ATOM(xmm15);
 
     LOAD_ATOM(cpu_features);
     LOAD_ATOM(cpu_vendor_name);
@@ -641,7 +666,6 @@ static int atload(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info)
     memset(&xmm_data[0], 0, sizeof(xmm_data));
     xmm = (__m128*) vector128_align(&xmm_data[0]);
 #endif
-
     return 0;
 }
 

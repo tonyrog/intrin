@@ -185,11 +185,87 @@ main(_Args) ->
     emit(vrsqrte, [d,d], [f32,u32]),
     emit(vrsqrteq, [q,q], [f32,u32]),
 
+    %% set/get elements to/from vectors
+    %% emit(vget_lane, [s,d,i], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64])
+    %% emit(vgetq_lane, [s,q,i], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64])
+    %% emit(vset_lane, [d,s,d,i], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64])
+    %% emit(vsetq_lane, [q,s,q,i], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64])
+    %% emit(vcreate, [d,u64], [s8,s16,s32,s64,f32,u8,u16,u32,u64,p8,p16]
+
+    %% s is the scalar type of corresponding element type
+    emit(vdup_n, [d, s], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64]),
+    emit(vdupq_n, [q, s], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64]),
+
+    emit(vmov_n, [d, s], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64]),
+    emit(vmovq_n, [q, s], [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64]),
+
+    %% vdup_lane, [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64])
+    %% vdupq_lane, [s8,s16,s32,f32,u8,u16,u32,p8,p16,s64,u64])
+    emit(vcombine, [q,d,d], [s8,s16,s32,s64,f32,u8,u16,u32,u64,p8,p16]),
+    
+    emit(vget_high, [d,q], [s8,s16,s32,s64,f32,u8,u16,u32,u64,p8,p16]),
+    emit(vget_low,  [d,q], [s8,s16,s32,s64,f32,u8,u16,u32,u64,p8,p16]),
+    
+    emit(vcvt_s32, [d,d], [f32]),
+    emit(vcvt_f32, [d,d], [s32,u32]),
+    emit(vcvt_u32, [d,d], [f32]),
+    emit(vcvtq_s32, [q,q], [f32]),
+    emit(vcvtq_f32, [q,q], [s32,u32]),
+    emit(vcvtq_u32, [q,q], [f32]),
+
+    %% emit(vcvt_n_s32, [d,d], [f32]),
+    %% emit(vcvt_n_f32, [d,d], [s32,u32]),
+    %% emit(vcvt_n_u32, [d,d], [f32]),
+    %% emit(vcvtq_n_s32, [d,d], [f32]),
+    %% emit(vcvtq_n_f32, [d,d], [s32,u32]),
+    %% emit(vcvtq_n_u32, [d,d], [f32]),
+
+    emit(vmovn, [n,q], [s16,s32,s64,u16,u32,u64]),
+    emit(vqmovn, [n,q], [s16,s32,s64,u16,u32,u64]),
+    emit(vqmovun, [nu,q], [s16,s32,s64]),
+    emit(vmovl, [l,d], [s8,s16,s32,u8,u16,u32]),
+
+    %% emit(vtbl1, [d,d,d], [s8,u8,p8])
+    %% emit(vtbl2, [dx2,d,d], [s8,u8,p8])
+    %% emit(vtbl3, [dx3,d,d], [s8,u8,p8])
+    %% emit(vtbl4, [dx4,d,d], [s8,u8,p8])
+
+    %% emit(vtblx1, [d,d,d,d], [s8,u8,p8])
+    %% emit(vtblx2, [d,dx2,d,d], [s8,u8,p8])
+    %% emit(vtblx3, [d,dx3,d,d], [s8,u8,p8])
+    %% emit(vtblx4, [d,dx4,d,d], [s8,u8,p8])
+
+    %% emit(vmul_lane, [d,d,d,i], [s16,s32,f32,u16,u32])
+    %% emit(vmulq_lane, [q,q,d,i], [s16,s32,f32,u16,u32])
+
+    %% emit(vmla_lane, [d,d,d,d,i], [s16,s32,f32,u16,u32])
+    %% emit(vmlaq_lane, [q,q,q,d,i], [s16,s32,f32,u16,u32])
+
+    %% emit(vmlal_lane, [l,l,d,d,i], [s16,s32,u16,u32])
+    %% emit(vqdmlal_lane, [l,l,d,di], [s16,s32]),
+    %% emit(vmls_lane, [d,d,d,d,i], [s16,s32,f32,u16,u32]),
+    %% emit(vmlsq_lane, [q,q,q,n,i], [s16,s32,f32,u16,u32]),
+    %% emit(vmlsl_lane, [l,l,d,d,i], [s16,s32,u16,u32]),
+    %% emit(vqdmlsl_lane, [l,l,d,d,i], [s16,s32])
+
+    %% logical
+    emit(vand, [d,d,d], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vandq, [q,q,q], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vorr, [d,d,d], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vorrq, [q,q,q], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(veor, [d,d,d], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(veorq, [q,q,q], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vbic, [d,d,d], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vbicq, [q,q,q], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vorn, [d,d,d], [s8,s16,s32,u8,u16,u32,s64,u64]),
+    emit(vornq, [q,q,q], [s8,s16,s32,u8,u16,u32,s64,u64]),
+
+    %% vreinterpret
+
     halt(0).
 
 
 emit(Instr,Ts,Elems) ->
-    io:format("// ~s.t = ~w\n", [string:to_upper(atom_to_list(Instr)), Elems]),
     _ = [begin
 	     TypeList = [ elem_to_type(E,T) || T <- Ts],
 	     SigList = [ elem_to_sig(T) || T <- Ts],
@@ -204,6 +280,7 @@ elem_to_sig(di) -> "D";
 elem_to_sig(dw) -> "D";
 elem_to_sig(du) -> "D";
 elem_to_sig(n)  -> "D";
+elem_to_sig(nu)  -> "D";
 elem_to_sig(q)  -> "Q";
 elem_to_sig(qw) -> "Q";
 elem_to_sig(qu) -> "Q";
@@ -211,7 +288,8 @@ elem_to_sig(qi) -> "Q";
 elem_to_sig(l)  -> "Q";
 elem_to_sig(y)  -> "z";
 elem_to_sig(ny) -> "z";
-elem_to_sig(x)  -> "z".
+elem_to_sig(x)  -> "z";
+elem_to_sig(s)  -> "s".
 
 %% elem_to_uint(f32,d) -> "uint32x2_t";
 %% elem_to_uint(f32,q) -> "uint32x4_t".
@@ -226,6 +304,18 @@ elem_to_type(u32, y)  -> "y32";
 elem_to_type(u64, y)  -> "y64";
 elem_to_type(p8,  y)  -> "y8";
 elem_to_type(p16,  y)  -> "y16";
+
+elem_to_type(s8,  s)  -> "int8";
+elem_to_type(s16, s)  -> "int16";
+elem_to_type(s32, s)  -> "int32";
+elem_to_type(s64, s)  -> "int64";
+elem_to_type(f32, s)  -> "float32";
+elem_to_type(u8,  s)  -> "uint8";
+elem_to_type(u16, s)  -> "uint16";
+elem_to_type(u32, s)  -> "uint32";
+elem_to_type(u64, s)  -> "uint64";
+elem_to_type(p8,  s)  -> "poly8";
+elem_to_type(p16,  s)  -> "poly16";
 
 elem_to_type(s16, ny)  -> "y8";
 elem_to_type(s32, ny)  -> "y16";
@@ -265,6 +355,7 @@ elem_to_type(s16,qw) -> "int32x4_t";
 elem_to_type(s16,qu) -> "uint16x8_t";
 elem_to_type(s16,l) -> "int32x4_t";
 elem_to_type(s16,n) -> "int8x8_t";
+elem_to_type(s16,nu) -> "uint8x8_t";
 
 elem_to_type(s32,d) -> "int32x2_t";
 elem_to_type(s32,di) -> "int32x2_t";
@@ -276,6 +367,7 @@ elem_to_type(s32,qw) -> "int64x2_t";
 elem_to_type(s32,qu) -> "uint32x4_t";
 elem_to_type(s32,l) -> "int64x2_t";
 elem_to_type(s32,n) -> "int16x4_t";
+elem_to_type(s32,nu) -> "unt16x4_t";
 
 elem_to_type(s64,d) -> "int64x1_t";
 elem_to_type(s64,di) -> "int64x1_t";
@@ -284,6 +376,7 @@ elem_to_type(s64,q) -> "int64x2_t";
 elem_to_type(s64,qi) -> "int64x2_t";
 elem_to_type(s64,qu) -> "uint64x2_t";
 elem_to_type(s64,n) -> "int32x2_t";
+elem_to_type(s64,nu) -> "uint32x2_t";
 
 elem_to_type(u8,d)  -> "uint8x8_t";
 elem_to_type(u8,di)  -> "int8x8_t";

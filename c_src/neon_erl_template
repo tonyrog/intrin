@@ -11,7 +11,13 @@
 
 #define op_DD(nm,dd,dn) \
 -export([nm/2]).
+#define op_Ds(nm,dd,s) \
+-export([nm/2]).
+#define op_DQ(nm,dd,qn) \
+-export([nm/2]).
 #define op_QQ(nm,qd,qn) \
+-export([nm/2]).
+#define op_Qs(nm,qd,s) \
 -export([nm/2]).
 #define op_QD(nm,qd,dn) \
 -export([nm/2]).
@@ -51,10 +57,16 @@
 -export([vget/1]).
 -export([vld/3]).
 
+%% convenience functions
+-export([vread/2, vwrite/3]).
+
 -export([info/1]).
 
 #undef op_DD
+#undef op_Ds
+#undef op_DQ
 #undef op_QQ
+#undef op_Qs
 #undef op_QD
 #undef op_DDD
 #undef op_DDz
@@ -77,8 +89,14 @@ init() ->
     erlang:load_nif(Nif, 0).
 #define op_DD(nm,dd,dn) \
 nm(_D,_N) -> erlang:error(nif_not_loaded).
+#define op_Ds(nm,dd,s) \
+nm(_D,_S) -> erlang:error(nif_not_loaded).
+#define op_DQ(nm,dd,qn) \
+nm(_D,_N) -> erlang:error(nif_not_loaded).
 #define op_QQ(nm,qd,qn) \
 nm(_D,_N) -> erlang:error(nif_not_loaded).
+#define op_Qs(nm,qd,s) \
+nm(_D,_S) -> erlang:error(nif_not_loaded).
 #define op_QD(nm,qd,dn) \
 nm(_D,_N) -> erlang:error(nif_not_loaded).
 #define op_DDD(nm,dd,dn,dm) \
@@ -116,5 +134,26 @@ vmov(_Dst,_Src) -> erlang:error(nif_not_loaded).
 vset(_Dst,_Data) -> erlang:error(nif_not_loaded).
 vld(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
 vget(_Src) -> erlang:error(nif_not_loaded).
+
+%% fixme: tuple?
+vread(u8, Src) -> [ X || <<X:8/native>> <= vget(Src)];
+vread(u16, Src) -> [ X || <<X:16/native>> <= vget(Src)];
+vread(u32, Src) -> [ X || <<X:32/native>> <= vget(Src)];
+vread(u64, Src) -> [ X || <<X:64/native>> <= vget(Src)];
+vread(s8, Src) -> [ X || <<X:8/signed-native>> <= vget(Src)];
+vread(s16, Src) -> [ X || <<X:16/signed-native>> <= vget(Src)];
+vread(s32, Src) -> [ X || <<X:32/signed-native>> <= vget(Src)];
+vread(s64, Src) -> [ X || <<X:64/signed-native>> <= vget(Src)];
+vread(f32, Src) -> [ X || <<X:32/float-native>> <= vget(Src)].
+
+vwrite(u8, Dst, Xs) ->  vset(Dst, << <<X:8/native>> || X <- Xs >>);
+vwrite(u16, Dst, Xs) -> vset(Dst, << <<X:16/native>>  || X <- Xs >>);
+vwrite(u32, Dst, Xs) -> vset(Dst, << <<X:32/native>>  || X <- Xs >>); 
+vwrite(u64, Dst, Xs) -> vset(Dst, << <<X:64/native>>  || X <- Xs >>);
+vwrite(s8, Dst, Xs) -> vset(Dst, << <<X:8/signed-native>>  || X <- Xs >>);
+vwrite(s16, Dst, Xs) -> vset(Dst, << <<X:16/signed-native>> || X <- Xs >>);
+vwrite(s32, Dst, Xs) -> vset(Dst, << <<X:32/signed-native>>  || X <- Xs >>);
+vwrite(s64, Dst, Xs) -> vset(Dst, << <<X:64/signed-native>>  || X <- Xs >>);
+vwrite(f32, Dst, Xs) -> vset(Dst, << <<X:32/float-native>>  || X <- Xs >>).
 
 info(_Info) ->  erlang:error(nif_not_loaded).

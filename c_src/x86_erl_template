@@ -41,6 +41,8 @@
 -export([mm_set/2]).
 -export([mm_get/1]).
 -export([mm_load/3]).
+-export([mm_read/2]).
+-export([mm_write/3]).
 
 -export([info/1]).
 
@@ -92,5 +94,28 @@ mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).
 mm_set(_Dst,_Data) -> erlang:error(nif_not_loaded).
 mm_load(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
 mm_get(_Src) -> erlang:error(nif_not_loaded).
+
+%% fixme: tuple?
+mm_read(u8, Src) -> [ X || <<X:8/native>> <= mm_get(Src)];
+mm_read(u16, Src) -> [ X || <<X:16/native>> <= mm_get(Src)];
+mm_read(u32, Src) -> [ X || <<X:32/native>> <= mm_get(Src)];
+mm_read(u64, Src) -> [ X || <<X:64/native>> <= mm_get(Src)];
+mm_read(i8, Src) -> [ X || <<X:8/signed-native>> <= mm_get(Src)];
+mm_read(i16, Src) -> [ X || <<X:16/signed-native>> <= mm_get(Src)];
+mm_read(i32, Src) -> [ X || <<X:32/signed-native>> <= mm_get(Src)];
+mm_read(i64, Src) -> [ X || <<X:64/signed-native>> <= mm_get(Src)];
+mm_read(ss, Src) -> [ X || <<X:32/float-native>> <= mm_get(Src)];
+mm_read(pd, Src) -> [ X || <<X:64/float-native>> <= mm_get(Src)].
+
+mm_write(u8, Dst, Xs) ->  mm_set(Dst, << <<X:8/native>> || X <- Xs >>);
+mm_write(u16, Dst, Xs) -> mm_set(Dst, << <<X:16/native>>  || X <- Xs >>);
+mm_write(u32, Dst, Xs) -> mm_set(Dst, << <<X:32/native>>  || X <- Xs >>); 
+mm_write(u64, Dst, Xs) -> mm_set(Dst, << <<X:64/native>>  || X <- Xs >>);
+mm_write(i8, Dst, Xs) -> mm_set(Dst, << <<X:8/signed-native>>  || X <- Xs >>);
+mm_write(i16, Dst, Xs) -> mm_set(Dst, << <<X:16/signed-native>> || X <- Xs >>);
+mm_write(i32, Dst, Xs) -> mm_set(Dst, << <<X:32/signed-native>>  || X <- Xs >>);
+mm_write(i64, Dst, Xs) -> mm_set(Dst, << <<X:64/signed-native>>  || X <- Xs >>);
+mm_write(ss, Dst, Xs) -> mm_set(Dst, << <<X:32/float-native>>  || X <- Xs >>);
+mm_write(pd, Dst, Xs) -> mm_set(Dst, << <<X:64/float-native>>  || X <- Xs >>).
 
 info(_Info) ->  erlang:error(nif_not_loaded).

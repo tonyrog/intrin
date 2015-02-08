@@ -116,17 +116,121 @@ DECL_ATOM(cpu_simd_support);
 
 DECL_ATOM(neon);
 
-int get_imm8(ErlNifEnv* env, const ERL_NIF_TERM term, uint8_t* value)
+int get_int8(ErlNifEnv* env, const ERL_NIF_TERM term, int8_t* value)
 {
-    int r;
-
-    if (!enif_get_int(env, term, &r))
-	return 0;
-    if ((r < 0) || (r > 255))
-	return 0;
-    *value = r;
-    return 1;
+  ErlNifSInt64 r;
+  if (!enif_get_int64(env, term, &r))
+    return 0;
+  if ((r < -0x80) || (r > 0x7f))
+    return 0;
+  *value = (int8_t) r;
+  return 1;
 }
+
+int get_int16(ErlNifEnv* env, const ERL_NIF_TERM term, int16_t* value)
+{
+  ErlNifSInt64 r;
+  if (!enif_get_int64(env, term, &r))
+    return 0;
+  if ((r < -0x8000) || (r > 0x7fff))
+    return 0;
+  *value = (int16_t) r;
+  return 1;
+}
+
+int get_int32(ErlNifEnv* env, const ERL_NIF_TERM term, int32_t* value)
+{
+  ErlNifSInt64 r;
+  if (!enif_get_int64(env, term, &r))
+    return 0;
+  if ((r < -0x80000000) || (r > 0x7fffffff))
+    return 0;
+  *value = (int32_t) r;
+  return 1;
+}
+
+int get_int64(ErlNifEnv* env, const ERL_NIF_TERM term, int64_t* value)
+{
+  ErlNifSInt64 r;
+  if (!enif_get_int64(env, term, &r))
+    return 0;
+  *value = (int64_t) r;
+  return 1;
+}
+
+int get_uint8(ErlNifEnv* env, const ERL_NIF_TERM term, uint8_t* value)
+{
+  ErlNifUInt64 r;
+  if (!enif_get_uint64(env, term, &r))
+    return 0;
+  if ((r < 0x00) || (r > 0xff))
+    return 0;
+  *value = (uint8_t) r;
+  return 1;
+}
+
+int get_uint16(ErlNifEnv* env, const ERL_NIF_TERM term, uint16_t* value)
+{
+  ErlNifUInt64 r;
+  if (!enif_get_uint64(env, term, &r))
+    return 0;
+  if ((r < 0x0000) || (r > 0xffff))
+    return 0;
+  *value = (uint16_t) r;
+  return 1;
+}
+
+int get_uint32(ErlNifEnv* env, const ERL_NIF_TERM term, uint32_t* value)
+{
+  ErlNifUInt64 r;
+  if (!enif_get_uint64(env, term, &r))
+    return 0;
+  if ((r < 0x00000000) || (r > 0xffffffff))
+    return 0;
+  *value = (uint32_t) r;
+  return 1;
+}
+
+int get_uint64(ErlNifEnv* env, const ERL_NIF_TERM term, uint64_t* value)
+{
+  ErlNifUInt64 r;
+  if (!enif_get_uint64(env, term, &r))
+    return 0;
+  *value = (uint64_t) r;
+  return 1;
+}
+
+int get_float32(ErlNifEnv* env, const ERL_NIF_TERM term, float32_t* value)
+{
+  double r;
+  if (!enif_get_double(env, term, &r))
+    return 0;
+  *value = (float32_t) r;
+  return 1;
+}
+
+int get_poly8(ErlNifEnv* env, const ERL_NIF_TERM term, poly8_t* value)
+{
+  ErlNifUInt64 r;
+  if (!enif_get_uint64(env, term, &r))
+    return 0;
+  if ((r < 0x00) || (r > 0xff))
+    return 0;
+  *value = (poly8_t) r;
+  return 1;
+}
+
+int get_poly16(ErlNifEnv* env, const ERL_NIF_TERM term, poly16_t* value)
+{
+  ErlNifUInt64 r;
+  if (!enif_get_uint64(env, term, &r))
+    return 0;
+  if ((r < 0x0000) || (r > 0xffff))
+    return 0;
+  *value = (poly16_t) r;
+  return 1;
+}
+
 
 int get_qreg(ErlNifEnv* env, const ERL_NIF_TERM term, int* value)
 {
@@ -303,6 +407,27 @@ static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM a
     return ATOM(ok);							\
 }
 
+#define op_Ds(nm,dd,s)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+  int d;								\
+  s##_t n;								\
+  if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+  if (!get_##s(env, argv[1], &n)) return enif_make_badarg(env);		\
+  dreg[d] = (int8x8_t) nm(n);						\
+  return ATOM(ok);							\
+}
+
+#define op_DQ(nm,dd,qn)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int d, n;							\
+    if (!get_dreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+    if (!get_qreg(env, argv[1], &n)) return enif_make_badarg(env);	\
+    dreg[d] = (int8x8_t) nm((qn)qreg[n]);				\
+    return ATOM(ok);							\
+}
+
 #define op_QQ(nm,qd,qn)				\
 static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 {									\
@@ -311,6 +436,17 @@ static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM a
     if (!get_qreg(env, argv[1], &n)) return enif_make_badarg(env);	\
     qreg[d] = (int8x16_t) nm((qn)qreg[n]);		\
     return ATOM(ok);							\
+}
+
+#define op_Qs(nm,dd,s)				\
+static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+  int d;								\
+  s##_t n;								\
+  if (!get_qreg(env, argv[0], &d)) return enif_make_badarg(env);	\
+  if (!get_##s(env, argv[1], &n)) return enif_make_badarg(env);		\
+  qreg[d] = (int8x16_t) nm(n);						\
+  return ATOM(ok);							\
 }
 
 #define op_QD(nm,qd,dn)				\
@@ -504,7 +640,10 @@ static ERL_NIF_TERM nif_neon_##nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM a
 #else
 
 #define op_DD(nm,dd,dn) NOT_SUPPORTED(nif_neon_##nm)
+#define op_Ds(nm,dd,dn) NOT_SUPPORTED(nif_neon_##nm)
+#define op_DQ(nm,dd,qn) NOT_SUPPORTED(nif_neon_##nm)
 #define op_QQ(nm,qd,qn) NOT_SUPPORTED(nif_neon_##nm)
+#define op_Qs(nm,qd,qn) NOT_SUPPORTED(nif_neon_##nm)
 #define op_QD(nm,qd,dn) NOT_SUPPORTED(nif_neon_##nm)
 #define op_DDD(nm,dd,dn,dm) NOT_SUPPORTED(nif_neon_##nm)
 #define op_DDz(nm,dd,dn,z) NOT_SUPPORTED(nif_neon_##nm)
@@ -637,7 +776,10 @@ static ERL_NIF_TERM vld(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 }
 
 #undef op_DD
+#undef op_Ds
+#undef op_DQ
 #undef op_QQ
+#undef op_Qs
 #undef op_QD
 #undef op_DDD
 #undef op_DDz
@@ -656,7 +798,10 @@ static ERL_NIF_TERM vld(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 #undef op_QQDD
 
 #define op_DD(nm,dd,dn)  { #nm, 2, nif_neon_##nm },
+#define op_Ds(nm,dd,s)  { #nm, 2, nif_neon_##nm },
+#define op_DQ(nm,dd,qn)  { #nm, 2, nif_neon_##nm },
 #define op_QQ(nm,qd,qn)  { #nm, 2, nif_neon_##nm },
+#define op_Qs(nm,qd,s)  { #nm, 2, nif_neon_##nm },
 #define op_QD(nm,qd,dn)  { #nm, 2, nif_neon_##nm },
 #define op_DDD(nm,dd,dn,dm)  { #nm, 3, nif_neon_##nm },
 #define op_DDz(nm,dd,dn,z)  { #nm, 3, nif_neon_##nm },

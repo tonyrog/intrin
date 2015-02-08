@@ -27,15 +27,15 @@
 #include "x86_util.h"
 #include "x86_cpuid.h"
 
-static unsigned char   cpu_serial_number[64];
-static size_t          cpu_serial_number_len = 0;
-static char            cpu_vendor_name[64];
-static size_t          cpu_vendor_name_len = 0;
-static char            cpu_features[1024];
-static size_t          cpu_features_len = 0;
-static int             cpu_cache_line_size = 0;
-static int             cpu_feature_cx = 0;
-static int             cpu_feature_dx = 0;
+static unsigned char   serial_number[64];
+static size_t          serial_number_len = 0;
+static char            vendor_name[64];
+static size_t          vendor_name_len = 0;
+static char            features[1024];
+static size_t          features_len = 0;
+static int             cache_line_size = 0;
+static uint32_t   feature_cx = 0;
+static uint32_t   feature_dx = 0;
 
 //
 // Return cpu serial number if available
@@ -44,9 +44,9 @@ static int             cpu_feature_dx = 0;
 //
 int x86_cpu_serial_number(unsigned char* buf, size_t maxlen)
 {
-    int n = (cpu_serial_number_len > maxlen) ? maxlen : cpu_serial_number_len;
-    memcpy(buf, cpu_serial_number, n);
-    return cpu_serial_number_len;
+    int n = (serial_number_len > maxlen) ? maxlen : serial_number_len;
+    memcpy(buf, serial_number, n);
+    return serial_number_len;
 }
 
 //
@@ -56,34 +56,34 @@ int x86_cpu_serial_number(unsigned char* buf, size_t maxlen)
 //
 int x86_cpu_vendor_name(char* buf, size_t maxlen)
 {
-    int n = (cpu_vendor_name_len > maxlen) ? maxlen : cpu_vendor_name_len;
-    memcpy(buf, cpu_vendor_name, n);
+    int n = (vendor_name_len > maxlen) ? maxlen : vendor_name_len;
+    memcpy(buf, vendor_name, n);
     return n;
 }
 
 int x86_cpu_features(char* buf, size_t maxlen)
 {
-    int n = (cpu_features_len > maxlen) ? maxlen : cpu_features_len;
-    memcpy(buf, cpu_features, n);
+    int n = (features_len > maxlen) ? maxlen : features_len;
+    memcpy(buf, features, n);
     return n;
 }
 
 int x86_cpu_cache_line_size()
 {
-    return cpu_cache_line_size;
+    return cache_line_size;
 }
 
-int x86_cpuid_check(int cxmask, int dxmask)
+int x86_cpuid_check(uint32_t cxmask, uint32_t dxmask)
 {
-    return (((cxmask & cpu_feature_cx) == cxmask) &&
-	    ((dxmask & cpu_feature_dx) == dxmask));
+    return (((cxmask & feature_cx) == cxmask) &&
+	    ((dxmask & feature_dx) == dxmask));
 }
 
 #if defined(__i386__) || defined(__x86_64__)
 //
 // http://en.wikipedia.org/wiki/CPUID
 //
-static char* cpuid_feature_name_dx[32] =
+static char* feature_name_dx[32] =
 {
     "fpu",    // 0  - Floating-point Unit On-Chip
     "vme",    // 1  - Virtual Mode Extension
@@ -120,7 +120,7 @@ static char* cpuid_feature_name_dx[32] =
 };
 
 // uses short name sse3 instead of pni !
-static char* cpuid_feature_name_cx[32] =
+static char* feature_name_cx[32] =
 {
     "sse3",         // 0  - Streaming SIMD Extensions 3
     "pclmulqdq",    // 1  - PCLMULDQ Instruction
@@ -156,52 +156,45 @@ static char* cpuid_feature_name_cx[32] =
     "hypervisor"    // 31 - (Not used in Intel doc...)
 };
 
-static void cpuid(int f, int *eax, int *ebx, int* ecx, int* edx)
+
+static void cpuid(uint32_t f,
+		  uint32_t* eax, uint32_t* ebx, 
+		  uint32_t* ecx, uint32_t* edx)
 {
-    // FIXME add check if cpuid instruction is available,
-    //  modern cpu's should have it so it's not very important right now.
-    asm volatile ("mov %%ebx, %%esi\n\t" /* Save %ebx.  */
-		  "cpuid\n\t"
-		  "xchgl %%ebx, %%esi" /* Restore %ebx.  */
-		  : "=a" (*eax), "=S" (*ebx), "=c" (*ecx), "=d" (*edx)
-		  : "0" (f)
-		  : "memory");
+  __asm__ __volatile__(
+#if defined(__x86_64__) || defined(_M_AMD64) || defined (_M_X64)
+    "pushq %%rbx     \n\t" /* save %rbx */
+#else
+    "pushl %%ebx     \n\t" /* save %ebx */
+#endif
+    "cpuid            \n\t"
+    "movl %%ebx ,%[ebx]  \n\t" /* write the result into output var */
+#if defined(__x86_64__) || defined(_M_AMD64) || defined (_M_X64)
+    "popq %%rbx \n\t"
+#else
+    "popl %%ebx \n\t"
+#endif
+    : "=a"(*eax), [ebx] "=r"(*ebx), "=c"(*ecx), "=d"(*edx)
+    : "a"(f));
 }
 
-/* static void cpuid2(int f1, int f2, int *eax, int *ebx, int* ecx, int* edx) */
-/* { */
-/*     asm volatile ("mov %%ebx, %%esi\n\t" /\* Save %ebx.  *\/ */
-/* 		  "cpuid\n\t" */
-/* 		  "xchgl %%ebx, %%esi" /\* Restore %ebx.  *\/ */
-/* 		  : "=a" (*eax), "=S" (*ebx), "=c" (*ecx), "=d" (*edx) */
-/* 		  : "0" (f1), "c" (f2) */
-/* 		  : "memory"); */
-/* } */
-
-/* static int cpuidMaxInputValue() */
-/* { */
-/*     int a,b,c,d; */
-/*     cpuid(0,&a,&b,&c,&d); */
-/*     return a; */
-/* } */
-
 // name must be at least 13 chars long 
-static char* cpuidVendorName(char* name)
+static char* cpuid_vendor_name(char* name)
 {
-    int a,b,c,d;
+    uint32_t a,b,c,d;
 
     cpuid(0,&a,&b,&c,&d);
 
-    *((int*)&name[0]) = b;
-    *((int*)&name[4]) = d;
-    *((int*)&name[8]) = c;
+    *((uint32_t*)&name[0]) = b;
+    *((uint32_t*)&name[4]) = d;
+    *((uint32_t*)&name[8]) = c;
     name[12] = '\0';
     return name;
 }
 
-static int cpuidFeature(int* ecx, int* edx)
+static int cpuid_feature(uint32_t* ecx, uint32_t* edx)
 {
-    int a, b, c, d;
+    uint32_t a, b, c, d;
 
     cpuid(1, &a, &b, &c, &d);
     *ecx = c;
@@ -210,9 +203,9 @@ static int cpuidFeature(int* ecx, int* edx)
 }
 
 // Serial number is 12 bytes 
-static int cpuidSerial(unsigned char* serial)
+static int cpuid_serial(unsigned char* serial)
 {
-    int a, b, c, d;
+    uint32_t a, b, c, d;
     int i;
     cpuid(1, &a, &b, &c, &d);
     for (i = 0; i < 3; i++) {
@@ -238,9 +231,9 @@ static int cpuidSerial(unsigned char* serial)
 /*     return ((a & CPUID_CORES_PER_PROCPAK) >> 26) + 1; */
 /* } */
 
-static int cpuidCacheLineSize()
+static int cpuid_cache_line_size()
 {
-    int a, b, c, d;
+    uint32_t a, b, c, d;
 
     cpuid(1, &a, &b, &c, &d);
     return ((b & CPUID_CLFUSH_SIZE) >> 8) << 3;
@@ -255,18 +248,19 @@ void x86_init()
     int i;
     int j;
 
-    name = cpuidVendorName(cpu_vendor_name);
-    cpu_vendor_name_len = strlen(name);
+    name = cpuid_vendor_name(vendor_name);
+    vendor_name_len = strlen(name);
 
-    cpuidFeature(&cpu_feature_cx, &cpu_feature_dx);
+    cpuid_feature(&feature_cx, &feature_dx);
+
     j = 0;
     // first the old dx flags
     for (i = 0; i < 32; i++) {
-	if ((1 << i) & cpu_feature_dx) {
-	    size_t len = strlen(cpuid_feature_name_dx[i]);
-	    if (j+len+1 < (int)sizeof(cpu_features)) {
-		memcpy(&cpu_features[j], cpuid_feature_name_dx[i], len);
-		cpu_features[j+len] = ',';
+	if ((1 << i) & feature_dx) {
+	    size_t len = strlen(feature_name_dx[i]);
+	    if (j+len+1 < (int)sizeof(features)) {
+		memcpy(&features[j], feature_name_dx[i], len);
+		features[j+len] = ',';
 		j++;
 		j += len;
 	    }
@@ -274,11 +268,11 @@ void x86_init()
     }
     // then the later cx flags
     for (i = 0; i < 32; i++) {
-	if ((1 << i) & cpu_feature_cx) {
-	    size_t len = strlen(cpuid_feature_name_cx[i]);
-	    if (j+len+1 < (int)sizeof(cpu_features)) {
-		memcpy(&cpu_features[j], cpuid_feature_name_cx[i], len);
-		cpu_features[j+len] = ',';
+	if ((1 << i) & feature_cx) {
+	    size_t len = strlen(feature_name_cx[i]);
+	    if (j+len+1 < (int)sizeof(features)) {
+	        memcpy(&features[j], feature_name_cx[i], len);
+		features[j+len] = ',';
 		j++;
 		j += len;
 	    }
@@ -287,19 +281,20 @@ void x86_init()
 
     if (j > 0) {
 	j--;
-	cpu_features[j] = '\0';
+	features[j] = '\0';
     }
-    cpu_features_len = j;
+    features_len = j;
 
-    cpu_cache_line_size = cpuidCacheLineSize();
+    cache_line_size = cpuid_cache_line_size();
 
-    if (cpu_feature_cx & CPUID_PSN) {
-	cpuidSerial(cpu_serial_number);
-	cpu_serial_number_len = 12;
+    if (feature_cx & CPUID_PSN) {
+	cpuid_serial(serial_number);
+	serial_number_len = 12;
     }
     else {
-	memset(cpu_serial_number, 0, sizeof(cpu_serial_number));
-	cpu_serial_number_len = 0;
+	memset(serial_number, 0, sizeof(serial_number));
+	serial_number_len = 0;
     }
+
 #endif
 }
