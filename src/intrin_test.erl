@@ -22,7 +22,7 @@ test_x86_1() ->
 test_neon_1() ->
     neon:vwrite(f32, d0, [1,2]),
     neon:vmov(d1, d0),
-    neon:vmulq_f32(d2, d1, d0),
+    neon:vmul_f32(d2, d1, d0),
     neon:vread(f32, d2).
 
 test_neon_2() ->
@@ -170,8 +170,8 @@ neon_blend(Src, Dst) ->
     neon:vmovl_u8(D16, T16H),        %% D16=unpack high D16
     neon_blnda(S16, A16, T16, D16, H16),
 
-    neon:movn_s16(T16L, L16),         %% narrow the low part
-    neon:movn_s16(T16H, H16),         %% narrow the high part
+    neon:vmovn_s16(T16L, L16),         %% narrow the low part
+    neon:vmovn_s16(T16H, H16),         %% narrow the high part
     neon:vget(T16).
 
 
