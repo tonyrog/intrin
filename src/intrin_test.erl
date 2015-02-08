@@ -141,37 +141,50 @@ x86_blnda(S16, A16, T16, D16, R16) ->
     x86:mm_mullo_epi16(T16,A16),       %% T16 *= A16
     x86:mm_add_epi16(T16, D16),        %% T16 += D16
     x86:mm_move(R16,T16),              %% L16 = T16
-    x86:mm_srli_epi16(R16, 8).         %% L16 <<= 8
+    x86:mm_srli_epi16(R16, 8).         %% L16 >>= 8
 
 
 %% blend (4) ARGB pixels in Src with (4) ARGB pixels in Dst
 %% | d0 | d1 | d2 | d3 | d4 | d5 | d6 | d7 | d8 | d9 |
 %% |    q0   |    q1   |    q2   |    q3   |    q4   |
 neon_blend(Src, Dst) ->
-    T16 = q1, T16H = d2, T16L = d1,
+    T16 = q1, T16H = d2, T16L = d3,
     A16 = q2,
     S16 = q3, S16H = d6, S16L = d7,
     D16 = q4, %% D16H = d8, D16L = d9,
     L16 = q5, H16 = q6,
+
+    %% io:format("Src = ~w\n", [Src]),
+    %% io:format("Dst = ~w\n", [Dst]),
     
     %% LOW 64
     neon:vset(S16, Src),              %% S16=Src
     neon:vmovl_u8(A16, S16L),         %% A16=select low part of S16
-    neon_seta(A16, T16),
+    neon:vmov(S16, A16),              %% S16 is the lower part 16 bit
+    neon_seta(A16, T16),              %% generate 16 bit alpha values
     neon:vset(T16,Dst),
     neon:vmovl_u8(D16, T16L),        %% D16=unpack low D16
+    %% io:format("low: A16 = ~w\n", [neon:vread(u16,A16)]),
+    %% io:format("low: S16 = ~w\n", [neon:vread(u16,S16)]),
+    %% io:format("low: D16 = ~w\n", [neon:vread(u16,D16)]),
     neon_blnda(S16, A16, T16, D16, L16),
+    %% io:format("low: L16 = ~w\n", [neon:vread(u16,L16)]),
 
     %% HIGH 64
     neon:vset(S16, Src),
     neon:vmovl_u8(A16, S16H),        %% A16=unpack high S16
+    neon:vmov(S16, A16),             %% S16 is the high part 16 bit
     neon_seta(A16,T16),              %% setup alpha
     neon:vset(T16,Dst),              %% T16 = Dst
     neon:vmovl_u8(D16, T16H),        %% D16=unpack high D16
+    %% io:format("high: A16 = ~w\n", [neon:vread(u16,A16)]),
+    %% io:format("high: S16 = ~w\n", [neon:vread(u16,S16)]),
+    %% io:format("high: D16 = ~w\n", [neon:vread(u16,D16)]),
     neon_blnda(S16, A16, T16, D16, H16),
+    %% io:format("low: H16 = ~w\n", [neon:vread(u16,H16)]),
 
-    neon:vmovn_s16(T16L, L16),         %% narrow the low part
-    neon:vmovn_s16(T16H, H16),         %% narrow the high part
+    neon:vmovn_u16(T16L, L16),         %% narrow the low part
+    neon:vmovn_u16(T16H, H16),         %% narrow the high part
     neon:vget(T16).
 
 
@@ -194,4 +207,4 @@ neon_blnda(S16, A16, T16, D16, R16) ->
     neon:vshlq_n_s16(D16,D16,8),        %% D16 <<= 8
     neon:vmulq_s16(T16,T16,A16),        %% T16 *= A16
     neon:vaddq_s16(T16,T16,D16),        %% T16 += D16
-    neon:vshlq_n_s16(R16,T16,8).        %% L16 = T16 << 8
+    neon:vshrq_n_s16(R16,T16,8).        %% L16 = T16 >> 8
