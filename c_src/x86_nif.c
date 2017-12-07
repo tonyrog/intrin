@@ -35,6 +35,29 @@
 #include <smmintrin.h>
 #endif
 
+#if defined(__AVX__)
+//#include <avxintrin.h>
+#include <immintrin.h>
+#endif
+
+#if defined(__AVX2__)
+// #include <avx2intrin.h>
+#include <immintrin.h>
+#endif
+
+#define VSIZE512 64
+typedef uint8_t vector512_t __attribute__ ((vector_size (VSIZE512)));
+#define vector512_align(ptr) \
+    ((uint8_t*)((((intptr_t)((uint8_t*)(ptr)))+(sizeof(vector512_t)-1)) & \
+		~(sizeof(vector512_t)-1)))
+
+
+#define VSIZE256 32
+typedef uint8_t vector256_t __attribute__ ((vector_size (VSIZE256)));
+#define vector256_align(ptr) \
+    ((uint8_t*)((((intptr_t)((uint8_t*)(ptr)))+(sizeof(vector256_t)-1)) & \
+		~(sizeof(vector256_t)-1)))
+
 #define VSIZE128 16
 typedef uint8_t vector128_t __attribute__ ((vector_size (VSIZE128)));
 
@@ -48,7 +71,6 @@ typedef uint8_t vector64_t __attribute__ ((vector_size (VSIZE64)));
 #define vector64_align(ptr) \
     ((uint8_t*)((((intptr_t)((uint8_t*)(ptr)))+(sizeof(vector64_t)-1)) & \
 		~(sizeof(vector64_t)-1)))
-
 
 #define m128i_imm8_op(op,v,imm8) case (imm8): return op((v),(imm8))
 
@@ -78,6 +100,8 @@ typedef uint8_t vector64_t __attribute__ ((vector_size (VSIZE64)));
 
 #ifdef __x86_64__
 #define NUM_XMM_REGS 16
+#define NUM_YMM_REGS 32
+#define NUM_ZMM_REGS 32
 #else
 #define NUM_XMM_REGS 8
 #endif
@@ -132,6 +156,16 @@ __m128* xmm;
 
 #endif
 
+#ifdef __AVX__
+uint8_t ymm_data[32*NUM_YMM_REGS+31];
+__m256* ymm;
+#endif
+
+#ifdef __AVX512__
+uint8_t zmm_data[64*NUM_YMM_REGS+63];
+__m512* zmm;
+#endif
+
 #define NUM_MM_REGS 8
 
 #ifdef __MMX__
@@ -183,6 +217,73 @@ DECL_ATOM(xmm13);
 DECL_ATOM(xmm14);
 DECL_ATOM(xmm15);
 
+DECL_ATOM(ymm0);
+DECL_ATOM(ymm1);
+DECL_ATOM(ymm2);
+DECL_ATOM(ymm3);
+DECL_ATOM(ymm4);
+DECL_ATOM(ymm5);
+DECL_ATOM(ymm6);
+DECL_ATOM(ymm7);
+DECL_ATOM(ymm8);
+DECL_ATOM(ymm9);
+DECL_ATOM(ymm10);
+DECL_ATOM(ymm11);
+DECL_ATOM(ymm12);
+DECL_ATOM(ymm13);
+DECL_ATOM(ymm14);
+DECL_ATOM(ymm15);
+DECL_ATOM(ymm16);
+DECL_ATOM(ymm17);
+DECL_ATOM(ymm18);
+DECL_ATOM(ymm19);
+DECL_ATOM(ymm20);
+DECL_ATOM(ymm21);
+DECL_ATOM(ymm22);
+DECL_ATOM(ymm23);
+DECL_ATOM(ymm24);
+DECL_ATOM(ymm25);
+DECL_ATOM(ymm26);
+DECL_ATOM(ymm27);
+DECL_ATOM(ymm28);
+DECL_ATOM(ymm29);
+DECL_ATOM(ymm30);
+DECL_ATOM(ymm31);
+
+DECL_ATOM(zmm0);
+DECL_ATOM(zmm1);
+DECL_ATOM(zmm2);
+DECL_ATOM(zmm3);
+DECL_ATOM(zmm4);
+DECL_ATOM(zmm5);
+DECL_ATOM(zmm6);
+DECL_ATOM(zmm7);
+DECL_ATOM(zmm8);
+DECL_ATOM(zmm9);
+DECL_ATOM(zmm10);
+DECL_ATOM(zmm11);
+DECL_ATOM(zmm12);
+DECL_ATOM(zmm13);
+DECL_ATOM(zmm14);
+DECL_ATOM(zmm15);
+DECL_ATOM(zmm16);
+DECL_ATOM(zmm17);
+DECL_ATOM(zmm18);
+DECL_ATOM(zmm19);
+DECL_ATOM(zmm20);
+DECL_ATOM(zmm21);
+DECL_ATOM(zmm22);
+DECL_ATOM(zmm23);
+DECL_ATOM(zmm24);
+DECL_ATOM(zmm25);
+DECL_ATOM(zmm26);
+DECL_ATOM(zmm27);
+DECL_ATOM(zmm28);
+DECL_ATOM(zmm29);
+DECL_ATOM(zmm30);
+DECL_ATOM(zmm31);
+
+
 DECL_ATOM(cpu_features);
 DECL_ATOM(cpu_vendor_name);
 DECL_ATOM(cpu_serial_number);
@@ -196,6 +297,96 @@ DECL_ATOM(sse3);
 DECL_ATOM(ssse3);
 DECL_ATOM(sse41);
 DECL_ATOM(sse42);
+
+int get_zmm(ErlNifEnv* env, const ERL_NIF_TERM term, int* value)
+{
+    int r;
+
+    if (!enif_get_int(env, term, &r)) {
+	if (term == ATOM(zmm0)) r = 0;
+	else if (term == ATOM(zmm1)) r = 1;
+	else if (term == ATOM(zmm2)) r = 2;
+	else if (term == ATOM(zmm3)) r = 3;
+	else if (term == ATOM(zmm4)) r = 4;
+	else if (term == ATOM(zmm5)) r = 5;
+	else if (term == ATOM(zmm6)) r = 6;
+	else if (term == ATOM(zmm7)) r = 7;
+	else if (term == ATOM(zmm8)) r = 8;
+	else if (term == ATOM(zmm9)) r = 9;
+	else if (term == ATOM(zmm10)) r = 10;
+	else if (term == ATOM(zmm11)) r = 11;
+	else if (term == ATOM(zmm12)) r = 12;
+	else if (term == ATOM(zmm13)) r = 13;
+	else if (term == ATOM(zmm14)) r = 14;
+	else if (term == ATOM(zmm15)) r = 15;
+	else if (term == ATOM(zmm16)) r = 16;
+	else if (term == ATOM(zmm17)) r = 17;
+	else if (term == ATOM(zmm18)) r = 18;
+	else if (term == ATOM(zmm19)) r = 19;
+	else if (term == ATOM(zmm20)) r = 20;
+	else if (term == ATOM(zmm21)) r = 21;
+	else if (term == ATOM(zmm22)) r = 22;
+	else if (term == ATOM(zmm23)) r = 23;
+	else if (term == ATOM(zmm24)) r = 24;
+	else if (term == ATOM(zmm25)) r = 25;
+	else if (term == ATOM(zmm26)) r = 26;
+	else if (term == ATOM(zmm27)) r = 27;
+	else if (term == ATOM(zmm28)) r = 28;
+	else if (term == ATOM(zmm29)) r = 29;
+	else if (term == ATOM(zmm30)) r = 30;
+	else if (term == ATOM(zmm31)) r = 31;
+	else return 0;
+    }
+    if ((r < 0) || (r >= NUM_ZMM_REGS))
+	return 0;
+    *value = r;
+    return 1;
+}
+
+int get_ymm(ErlNifEnv* env, const ERL_NIF_TERM term, int* value)
+{
+    int r;
+
+    if (!enif_get_int(env, term, &r)) {
+	if (term == ATOM(ymm0)) r = 0;
+	else if (term == ATOM(ymm1)) r = 1;
+	else if (term == ATOM(ymm2)) r = 2;
+	else if (term == ATOM(ymm3)) r = 3;
+	else if (term == ATOM(ymm4)) r = 4;
+	else if (term == ATOM(ymm5)) r = 5;
+	else if (term == ATOM(ymm6)) r = 6;
+	else if (term == ATOM(ymm7)) r = 7;
+	else if (term == ATOM(ymm8)) r = 8;
+	else if (term == ATOM(ymm9)) r = 9;
+	else if (term == ATOM(ymm10)) r = 10;
+	else if (term == ATOM(ymm11)) r = 11;
+	else if (term == ATOM(ymm12)) r = 12;
+	else if (term == ATOM(ymm13)) r = 13;
+	else if (term == ATOM(ymm14)) r = 14;
+	else if (term == ATOM(ymm15)) r = 15;
+	else if (term == ATOM(ymm16)) r = 16;
+	else if (term == ATOM(ymm17)) r = 17;
+	else if (term == ATOM(ymm18)) r = 18;
+	else if (term == ATOM(ymm19)) r = 19;
+	else if (term == ATOM(ymm20)) r = 20;
+	else if (term == ATOM(ymm21)) r = 21;
+	else if (term == ATOM(ymm22)) r = 22;
+	else if (term == ATOM(ymm23)) r = 23;
+	else if (term == ATOM(ymm24)) r = 24;
+	else if (term == ATOM(ymm25)) r = 25;
+	else if (term == ATOM(ymm26)) r = 26;
+	else if (term == ATOM(ymm27)) r = 27;
+	else if (term == ATOM(ymm28)) r = 28;
+	else if (term == ATOM(ymm29)) r = 29;
+	else if (term == ATOM(ymm30)) r = 30;
+	else if (term == ATOM(ymm31)) r = 31;
+	else return 0;
+    }
+    if ((r < 0) || (r >= NUM_YMM_REGS))
+	return 0;
+    *value = r;
+    return 1;
+}
 
 int get_xmm(ErlNifEnv* env, const ERL_NIF_TERM term, int* value)
 {
@@ -455,18 +646,43 @@ static ERL_NIF_TERM nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
 
 #endif
 
+#if defined(__AVX__)
+
+#define op_YY(pfx,nm,dt,st)				\
+static ERL_NIF_TERM nm(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[]) \
+{									\
+    int src, dst;							\
+    if (!get_ymm(env, argv[0], &dst)) return enif_make_badarg(env);	\
+    if (!get_ymm(env, argv[1], &src)) return enif_make_badarg(env);	\
+    ymm[dst] = (__m256)pfx##nm((dt)ymm[dst], (st)ymm[src]);		\
+    return ATOM(ok);							\
+}
+
+#else
+
+#define op_YY(pfx,nm,dt,st) NOT_SUPPORTED(nm)
+
+#endif
+
 #include "mmx.inc"
 #include "sse.inc"
 #include "sse2.inc"
 #include "sse3.inc"
 #include "ssse3.inc"
 #include "sse4.1.inc"
+#include "avx.inc"
 
 static ERL_NIF_TERM mm_move(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
     int src, dst;
 
-    if (get_xmm(env, argv[0], &dst) && get_xmm(env, argv[1], &src)) {
+    if (get_ymm(env, argv[0], &dst) && get_ymm(env, argv[1], &src)) {
+#if defined(__AVX__)
+	ymm[dst] = ymm[src];
+	return ATOM(ok);
+#endif
+    }    
+    else if (get_xmm(env, argv[0], &dst) && get_xmm(env, argv[1], &src)) {
 #if defined(__SSE__)
 	xmm[dst] = xmm[src];
 	return ATOM(ok);
@@ -487,7 +703,20 @@ static ERL_NIF_TERM mm_get(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 {
     int src;
 
-    if (get_xmm(env, argv[0], &src)) {
+    if (get_ymm(env, argv[0], &src)) {
+#if defined(__AVX__)
+	ErlNifBinary bin;
+	ERL_NIF_TERM r;
+
+	if (!enif_alloc_binary(VSIZE256, &bin))
+	    return ATOM(error);
+	memcpy(bin.data,&ymm[src],VSIZE256);
+	r = enif_make_binary(env, &bin);
+	enif_release_binary(&bin);
+	return r;
+#endif
+    }
+    else if (get_xmm(env, argv[0], &src)) {
 #if defined(__SSE__)
 	ErlNifBinary bin;
 	ERL_NIF_TERM r;
@@ -526,7 +755,13 @@ static ERL_NIF_TERM mm_set(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!enif_inspect_iolist_as_binary(env, argv[1], &bin))
 	return enif_make_badarg(env);
 
-    if (get_xmm(env, argv[0], &dst) && (bin.size == VSIZE128)) {
+    if (get_ymm(env, argv[0], &dst) && (bin.size == VSIZE256)) {
+#if defined(__AVX__)
+	memcpy(&ymm[dst], bin.data, VSIZE256);
+	return ATOM(ok);
+#endif
+    }
+    else if (get_xmm(env, argv[0], &dst) && (bin.size == VSIZE128)) {
 #if defined(__SSE__)
 	memcpy(&xmm[dst], bin.data, VSIZE128);
 	return ATOM(ok);
@@ -555,7 +790,13 @@ static ERL_NIF_TERM mm_load(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     if (!enif_get_uint(env, argv[1], &offset))
 	return enif_make_badarg(env);
 
-    if (get_xmm(env, argv[0], &dst) && (bin.size-offset >= VSIZE128)) {
+    if (get_ymm(env, argv[0], &dst) && (bin.size-offset >= VSIZE256)) {
+#if defined(__AVX__)
+	memcpy(&ymm[dst], bin.data+offset, VSIZE256);
+	return ATOM(ok);
+#endif
+    } 
+    else if (get_xmm(env, argv[0], &dst) && (bin.size-offset >= VSIZE128)) {
 #if defined(__SSE__)
 	memcpy(&xmm[dst], bin.data+offset, VSIZE128);
 	return ATOM(ok);
@@ -572,6 +813,7 @@ static ERL_NIF_TERM mm_load(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
     return ATOM(error);
 }
 
+#undef op_YY
 #undef op_XX1
 #undef op_XX
 #undef op_X
@@ -583,6 +825,7 @@ static ERL_NIF_TERM mm_load(ErlNifEnv* env, int argc, const ERL_NIF_TERM argv[])
 #undef bool_MM
 #undef op_My
 
+#define op_YY(pfx,nm,dt,st) { #nm, 2, nm },
 #define op_XX1(pfx,nm,dt,st) { #nm, 2, nm },
 #define op_XX(pfx,nm,dt,st) { #nm, 2, nm },
 #define op_X(pfx,nm,dt)      { #nm, 1, nm },
@@ -601,6 +844,7 @@ static ErlNifFunc nif_funcs[] = {
 #include "sse3.inc"
 #include "ssse3.inc"
 #include "sse4.1.inc"
+#include "avx.inc"
     { "mm_move", 2, mm_move },   // dst src
     { "mm_set",  2, mm_set },    // dst Vector::binary()
     { "mm_get",  1, mm_get },    // get => Vector::binary()
@@ -644,6 +888,73 @@ static int atload(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info)
     LOAD_ATOM(xmm14);
     LOAD_ATOM(xmm15);
 
+    LOAD_ATOM(ymm0);
+LOAD_ATOM(ymm1);
+LOAD_ATOM(ymm2);
+LOAD_ATOM(ymm3);
+LOAD_ATOM(ymm4);
+LOAD_ATOM(ymm5);
+LOAD_ATOM(ymm6);
+LOAD_ATOM(ymm7);
+LOAD_ATOM(ymm8);
+LOAD_ATOM(ymm9);
+LOAD_ATOM(ymm10);
+LOAD_ATOM(ymm11);
+LOAD_ATOM(ymm12);
+LOAD_ATOM(ymm13);
+LOAD_ATOM(ymm14);
+LOAD_ATOM(ymm15);
+LOAD_ATOM(ymm16);
+LOAD_ATOM(ymm17);
+LOAD_ATOM(ymm18);
+LOAD_ATOM(ymm19);
+LOAD_ATOM(ymm20);
+LOAD_ATOM(ymm21);
+LOAD_ATOM(ymm22);
+LOAD_ATOM(ymm23);
+LOAD_ATOM(ymm24);
+LOAD_ATOM(ymm25);
+LOAD_ATOM(ymm26);
+LOAD_ATOM(ymm27);
+LOAD_ATOM(ymm28);
+LOAD_ATOM(ymm29);
+LOAD_ATOM(ymm30);
+LOAD_ATOM(ymm31);
+
+LOAD_ATOM(zmm0);
+LOAD_ATOM(zmm1);
+LOAD_ATOM(zmm2);
+LOAD_ATOM(zmm3);
+LOAD_ATOM(zmm4);
+LOAD_ATOM(zmm5);
+LOAD_ATOM(zmm6);
+LOAD_ATOM(zmm7);
+LOAD_ATOM(zmm8);
+LOAD_ATOM(zmm9);
+LOAD_ATOM(zmm10);
+LOAD_ATOM(zmm11);
+LOAD_ATOM(zmm12);
+LOAD_ATOM(zmm13);
+LOAD_ATOM(zmm14);
+LOAD_ATOM(zmm15);
+LOAD_ATOM(zmm16);
+LOAD_ATOM(zmm17);
+LOAD_ATOM(zmm18);
+LOAD_ATOM(zmm19);
+LOAD_ATOM(zmm20);
+LOAD_ATOM(zmm21);
+LOAD_ATOM(zmm22);
+LOAD_ATOM(zmm23);
+LOAD_ATOM(zmm24);
+LOAD_ATOM(zmm25);
+LOAD_ATOM(zmm26);
+LOAD_ATOM(zmm27);
+LOAD_ATOM(zmm28);
+LOAD_ATOM(zmm29);
+LOAD_ATOM(zmm30);
+LOAD_ATOM(zmm31);
+
+
     LOAD_ATOM(cpu_features);
     LOAD_ATOM(cpu_vendor_name);
     LOAD_ATOM(cpu_serial_number);
@@ -666,6 +977,14 @@ static int atload(ErlNifEnv* env, void** priv_data, ERL_NIF_TERM load_info)
     memset(&xmm_data[0], 0, sizeof(xmm_data));
     xmm = (__m128*) vector128_align(&xmm_data[0]);
 #endif
+#ifdef __AVX__
+    memset(&ymm_data[0], 0, sizeof(ymm_data));
+    ymm = (__m256*) vector256_align(&ymm_data[0]);
+#endif
+#ifdef __AVX512__
+    memset(&zmm_data[0], 0, sizeof(zmm_data));
+    zmm = (__m512*) vector512_align(&zmm_data[0]);
+#endif    
     return 0;
 }
 

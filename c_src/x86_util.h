@@ -23,6 +23,7 @@ extern int x86_cpu_vendor_name(char* buf, size_t maxlen);
 extern int x86_cpu_serial_number(unsigned char* buf, size_t maxlen);
 extern int x86_cpu_features(char* buf, size_t maxlen);
 extern int x86_cpuid_check(uint32_t cxmask, uint32_t dxmask);
+extern int x86_cpuid_ext_check(uint32_t bxmask,uint32_t cxmask,uint32_t dxmask);
 extern void x86_init(void);
 
 #endif

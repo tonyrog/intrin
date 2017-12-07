@@ -1,8 +1,3 @@
-
-
-
-
-
 %%% @author Tony Rogvall <tony@rogvall.se>
 %%% @copyright (C) 2013, Tony Rogvall
 %%% @doc
@@ -14,7 +9,10 @@
 
 -on_load(init/0).
 
-
+-export([mm256_add_pd/2]).
+-export([mm256_add_ps/2]).
+-export([mm256_addsub_pd/2]).
+-export([mm256_addsub_ps/2]).
 
 -export([mm_packs_pi16/2]).
 -export([mm_packs_pi32/2]).
@@ -351,342 +349,349 @@
 
 -export([info/1]).
 
+-define(nif_stub(),
+	erlang:nif_error({nif_not_loaded,module,?MODULE,line,?LINE})).
+
 init() ->
     Nif = filename:join([code:priv_dir(intrin),"x86_nif"]),
     erlang:load_nif(Nif, 0).
 
 
+mm256_add_pd(_Dst,_Src) -> ?nif_stub().
+mm256_add_ps(_Dst,_Src) -> ?nif_stub().
+mm256_addsub_pd(_Dst,_Src) -> ?nif_stub().
+mm256_addsub_ps(_Dst,_Src) -> ?nif_stub().
 
-mm_packs_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_packs_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_packs_pu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_pu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_pu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_pu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_pu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_madd_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mulhi_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mullo_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sll_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_slli_pi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_sll_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_slli_pi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_sll_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_slli_si64(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_sra_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srai_pi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_sra_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srai_pi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srl_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srli_pi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srl_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srli_pi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srl_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srli_si64(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_and_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_andnot_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_or_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_xor_si64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_pi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_pi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_pi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-
-
-mm_add_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mul_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_div_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sqrt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_rcp_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_rsqrt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-
-mm_add_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mul_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_div_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sqrt_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_rcp_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_rsqrt_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_and_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_andnot_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_or_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_xor_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmple_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpge_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpneq_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnlt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnle_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpngt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnge_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpord_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpunord_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmple_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpge_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpneq_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnlt_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnle_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpngt_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnge_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpord_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpunord_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comieq_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comilt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comile_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comigt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comige_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comineq_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomieq_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomilt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomile_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomigt_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomige_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomineq_ss(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-mm_unpackhi_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_packs_pi16(_Dst,_Src) -> ?nif_stub().
+mm_packs_pi32(_Dst,_Src) -> ?nif_stub().
+mm_packs_pu16(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_pi8(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_pi16(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_pi32(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_pi8(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_pi16(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_pi32(_Dst,_Src) -> ?nif_stub().
+mm_add_pi8(_Dst,_Src) -> ?nif_stub().
+mm_add_pi16(_Dst,_Src) -> ?nif_stub().
+mm_add_pi32(_Dst,_Src) -> ?nif_stub().
+mm_add_si64(_Dst,_Src) -> ?nif_stub().
+mm_adds_pi8(_Dst,_Src) -> ?nif_stub().
+mm_adds_pi16(_Dst,_Src) -> ?nif_stub().
+mm_adds_pu8(_Dst,_Src) -> ?nif_stub().
+mm_adds_pu16(_Dst,_Src) -> ?nif_stub().
+mm_sub_pi8(_Dst,_Src) -> ?nif_stub().
+mm_sub_pi16(_Dst,_Src) -> ?nif_stub().
+mm_sub_pi32(_Dst,_Src) -> ?nif_stub().
+mm_sub_si64(_Dst,_Src) -> ?nif_stub().
+mm_subs_pi8(_Dst,_Src) -> ?nif_stub().
+mm_subs_pi16(_Dst,_Src) -> ?nif_stub().
+mm_subs_pu8(_Dst,_Src) -> ?nif_stub().
+mm_subs_pu16(_Dst,_Src) -> ?nif_stub().
+mm_madd_pi16(_Dst,_Src) -> ?nif_stub().
+mm_mulhi_pi16(_Dst,_Src) -> ?nif_stub().
+mm_mullo_pi16(_Dst,_Src) -> ?nif_stub().
+mm_sll_pi16(_Dst,_Src) -> ?nif_stub().
+mm_slli_pi16(_Dst,_Imm8) -> ?nif_stub().
+mm_sll_pi32(_Dst,_Src) -> ?nif_stub().
+mm_slli_pi32(_Dst,_Imm8) -> ?nif_stub().
+mm_sll_si64(_Dst,_Src) -> ?nif_stub().
+mm_slli_si64(_Dst,_Imm8) -> ?nif_stub().
+mm_sra_pi16(_Dst,_Src) -> ?nif_stub().
+mm_srai_pi16(_Dst,_Imm8) -> ?nif_stub().
+mm_sra_pi32(_Dst,_Src) -> ?nif_stub().
+mm_srai_pi32(_Dst,_Imm8) -> ?nif_stub().
+mm_srl_pi16(_Dst,_Src) -> ?nif_stub().
+mm_srli_pi16(_Dst,_Imm8) -> ?nif_stub().
+mm_srl_pi32(_Dst,_Src) -> ?nif_stub().
+mm_srli_pi32(_Dst,_Imm8) -> ?nif_stub().
+mm_srl_si64(_Dst,_Src) -> ?nif_stub().
+mm_srli_si64(_Dst,_Imm8) -> ?nif_stub().
+mm_and_si64(_Dst,_Src) -> ?nif_stub().
+mm_andnot_si64(_Dst,_Src) -> ?nif_stub().
+mm_or_si64(_Dst,_Src) -> ?nif_stub().
+mm_xor_si64(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_pi8(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_pi8(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_pi16(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_pi16(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_pi32(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_pi32(_Dst,_Src) -> ?nif_stub().
 
 
 
-mm_add_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mul_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mul_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_div_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_div_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sqrt_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sqrt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_and_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_andnot_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_or_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_xor_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmple_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpge_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpneq_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnlt_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnle_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpngt_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnge_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpord_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpunord_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmple_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpge_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpneq_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnlt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnle_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpngt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpnge_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpord_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpunord_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comieq_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comilt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comile_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comigt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comige_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_comineq_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomieq_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomilt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomile_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomigt_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomige_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_ucomineq_sd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-mm_unpackhi_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_add_ss(_Dst,_Src) -> ?nif_stub().
+mm_sub_ss(_Dst,_Src) -> ?nif_stub().
+mm_mul_ss(_Dst,_Src) -> ?nif_stub().
+mm_div_ss(_Dst,_Src) -> ?nif_stub().
+mm_sqrt_ss(_Dst,_Src) -> ?nif_stub().
+mm_rcp_ss(_Dst,_Src) -> ?nif_stub().
+mm_rsqrt_ss(_Dst,_Src) -> ?nif_stub().
+mm_min_ss(_Dst,_Src) -> ?nif_stub().
+mm_max_ss(_Dst,_Src) -> ?nif_stub().
 
 
+mm_add_ps(_Dst,_Src) -> ?nif_stub().
+mm_sub_ps(_Dst,_Src) -> ?nif_stub().
+mm_mul_ps(_Dst,_Src) -> ?nif_stub().
+mm_div_ps(_Dst,_Src) -> ?nif_stub().
+mm_sqrt_ps(_Dst,_Src) -> ?nif_stub().
+mm_rcp_ps(_Dst,_Src) -> ?nif_stub().
+mm_rsqrt_ps(_Dst,_Src) -> ?nif_stub().
+mm_min_ps(_Dst,_Src) -> ?nif_stub().
+mm_max_ps(_Dst,_Src) -> ?nif_stub().
+mm_and_ps(_Dst,_Src) -> ?nif_stub().
+mm_andnot_ps(_Dst,_Src) -> ?nif_stub().
+mm_or_ps(_Dst,_Src) -> ?nif_stub().
+mm_xor_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmple_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpge_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpneq_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpnlt_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpnle_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpngt_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpnge_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpord_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpunord_ss(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmple_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpge_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpneq_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpnlt_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpnle_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpngt_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpnge_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpord_ps(_Dst,_Src) -> ?nif_stub().
+mm_cmpunord_ps(_Dst,_Src) -> ?nif_stub().
+mm_comieq_ss(_Dst,_Src) -> ?nif_stub().
+mm_comilt_ss(_Dst,_Src) -> ?nif_stub().
+mm_comile_ss(_Dst,_Src) -> ?nif_stub().
+mm_comigt_ss(_Dst,_Src) -> ?nif_stub().
+mm_comige_ss(_Dst,_Src) -> ?nif_stub().
+mm_comineq_ss(_Dst,_Src) -> ?nif_stub().
+mm_ucomieq_ss(_Dst,_Src) -> ?nif_stub().
+mm_ucomilt_ss(_Dst,_Src) -> ?nif_stub().
+mm_ucomile_ss(_Dst,_Src) -> ?nif_stub().
+mm_ucomigt_ss(_Dst,_Src) -> ?nif_stub().
+mm_ucomige_ss(_Dst,_Src) -> ?nif_stub().
+mm_ucomineq_ss(_Dst,_Src) -> ?nif_stub().
 
-mm_packs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_packs_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_packus_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpackhi_epi64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_unpacklo_epi64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_add_epi64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_adds_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sub_epi64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_subs_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_madd_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mulhi_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mullo_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-mm_mul_epu32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_slli_epi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_slli_epi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_slli_epi64(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srai_epi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srai_epi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srli_si128(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_slli_si128(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srli_epi16(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srli_epi32(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_srli_epi64(_Dst,_Imm8) -> erlang:error(nif_not_loaded).
-mm_sll_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sll_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sll_epi64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sra_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sra_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srl_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srl_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_srl_epi64(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_and_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_andnot_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_or_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_xor_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpeq_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmplt_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_cmpgt_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_unpackhi_ps(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_ps(_Dst,_Src) -> ?nif_stub().
 
 
 
+mm_add_pd(_Dst,_Src) -> ?nif_stub().
+mm_add_sd(_Dst,_Src) -> ?nif_stub().
+mm_sub_pd(_Dst,_Src) -> ?nif_stub().
+mm_sub_sd(_Dst,_Src) -> ?nif_stub().
+mm_mul_pd(_Dst,_Src) -> ?nif_stub().
+mm_mul_sd(_Dst,_Src) -> ?nif_stub().
+mm_div_pd(_Dst,_Src) -> ?nif_stub().
+mm_div_sd(_Dst,_Src) -> ?nif_stub().
+mm_sqrt_pd(_Dst,_Src) -> ?nif_stub().
+mm_sqrt_sd(_Dst,_Src) -> ?nif_stub().
+mm_min_pd(_Dst,_Src) -> ?nif_stub().
+mm_min_sd(_Dst,_Src) -> ?nif_stub().
+mm_max_pd(_Dst,_Src) -> ?nif_stub().
+mm_max_sd(_Dst,_Src) -> ?nif_stub().
+mm_and_pd(_Dst,_Src) -> ?nif_stub().
+mm_andnot_pd(_Dst,_Src) -> ?nif_stub().
+mm_or_pd(_Dst,_Src) -> ?nif_stub().
+mm_xor_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmple_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpge_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpneq_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpnlt_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpnle_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpngt_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpnge_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpord_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpunord_pd(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmple_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpge_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpneq_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpnlt_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpnle_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpngt_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpnge_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpord_sd(_Dst,_Src) -> ?nif_stub().
+mm_cmpunord_sd(_Dst,_Src) -> ?nif_stub().
+mm_comieq_sd(_Dst,_Src) -> ?nif_stub().
+mm_comilt_sd(_Dst,_Src) -> ?nif_stub().
+mm_comile_sd(_Dst,_Src) -> ?nif_stub().
+mm_comigt_sd(_Dst,_Src) -> ?nif_stub().
+mm_comige_sd(_Dst,_Src) -> ?nif_stub().
+mm_comineq_sd(_Dst,_Src) -> ?nif_stub().
+mm_ucomieq_sd(_Dst,_Src) -> ?nif_stub().
+mm_ucomilt_sd(_Dst,_Src) -> ?nif_stub().
+mm_ucomile_sd(_Dst,_Src) -> ?nif_stub().
+mm_ucomigt_sd(_Dst,_Src) -> ?nif_stub().
+mm_ucomige_sd(_Dst,_Src) -> ?nif_stub().
+mm_ucomineq_sd(_Dst,_Src) -> ?nif_stub().
 
-mm_max_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_unpackhi_pd(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_pd(_Dst,_Src) -> ?nif_stub().
 
-mm_mulhi_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_shufflehi_epi16(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
-mm_shufflelo_epi16(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
-mm_shuffle_epi32(_Dst,_Src,_Imm8) -> erlang:error(nif_not_loaded).
 
-mm_avg_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_avg_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sad_epu8(_Dst,_Src) -> erlang:error(nif_not_loaded).
+
+mm_packs_epi16(_Dst,_Src) -> ?nif_stub().
+mm_packs_epi32(_Dst,_Src) -> ?nif_stub().
+mm_packus_epi16(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_epi8(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_epi16(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_epi32(_Dst,_Src) -> ?nif_stub().
+mm_unpackhi_epi64(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_epi8(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_epi16(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_epi32(_Dst,_Src) -> ?nif_stub().
+mm_unpacklo_epi64(_Dst,_Src) -> ?nif_stub().
+mm_add_epi8(_Dst,_Src) -> ?nif_stub().
+mm_add_epi16(_Dst,_Src) -> ?nif_stub().
+mm_add_epi32(_Dst,_Src) -> ?nif_stub().
+mm_add_epi64(_Dst,_Src) -> ?nif_stub().
+mm_adds_epi8(_Dst,_Src) -> ?nif_stub().
+mm_adds_epi16(_Dst,_Src) -> ?nif_stub().
+mm_adds_epu8(_Dst,_Src) -> ?nif_stub().
+mm_adds_epu16(_Dst,_Src) -> ?nif_stub().
+mm_sub_epi8(_Dst,_Src) -> ?nif_stub().
+mm_sub_epi16(_Dst,_Src) -> ?nif_stub().
+mm_sub_epi32(_Dst,_Src) -> ?nif_stub().
+mm_sub_epi64(_Dst,_Src) -> ?nif_stub().
+mm_subs_epi8(_Dst,_Src) -> ?nif_stub().
+mm_subs_epi16(_Dst,_Src) -> ?nif_stub().
+mm_subs_epu8(_Dst,_Src) -> ?nif_stub().
+mm_subs_epu16(_Dst,_Src) -> ?nif_stub().
+mm_madd_epi16(_Dst,_Src) -> ?nif_stub().
+mm_mulhi_epi16(_Dst,_Src) -> ?nif_stub().
+mm_mullo_epi16(_Dst,_Src) -> ?nif_stub().
+
+mm_mul_epu32(_Dst,_Src) -> ?nif_stub().
+mm_slli_epi16(_Dst,_Imm8) -> ?nif_stub().
+mm_slli_epi32(_Dst,_Imm8) -> ?nif_stub().
+mm_slli_epi64(_Dst,_Imm8) -> ?nif_stub().
+mm_srai_epi16(_Dst,_Imm8) -> ?nif_stub().
+mm_srai_epi32(_Dst,_Imm8) -> ?nif_stub().
+mm_srli_si128(_Dst,_Imm8) -> ?nif_stub().
+mm_slli_si128(_Dst,_Imm8) -> ?nif_stub().
+mm_srli_epi16(_Dst,_Imm8) -> ?nif_stub().
+mm_srli_epi32(_Dst,_Imm8) -> ?nif_stub().
+mm_srli_epi64(_Dst,_Imm8) -> ?nif_stub().
+mm_sll_epi16(_Dst,_Src) -> ?nif_stub().
+mm_sll_epi32(_Dst,_Src) -> ?nif_stub().
+mm_sll_epi64(_Dst,_Src) -> ?nif_stub().
+mm_sra_epi16(_Dst,_Src) -> ?nif_stub().
+mm_sra_epi32(_Dst,_Src) -> ?nif_stub().
+mm_srl_epi16(_Dst,_Src) -> ?nif_stub().
+mm_srl_epi32(_Dst,_Src) -> ?nif_stub().
+mm_srl_epi64(_Dst,_Src) -> ?nif_stub().
+mm_and_si128(_Dst,_Src) -> ?nif_stub().
+mm_andnot_si128(_Dst,_Src) -> ?nif_stub().
+mm_or_si128(_Dst,_Src) -> ?nif_stub().
+mm_xor_si128(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_epi8(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_epi16(_Dst,_Src) -> ?nif_stub().
+mm_cmpeq_epi32(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_epi8(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_epi16(_Dst,_Src) -> ?nif_stub().
+mm_cmplt_epi32(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_epi8(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_epi16(_Dst,_Src) -> ?nif_stub().
+mm_cmpgt_epi32(_Dst,_Src) -> ?nif_stub().
 
 
 
 
+mm_max_epi16(_Dst,_Src) -> ?nif_stub().
+mm_max_epu8(_Dst,_Src) -> ?nif_stub().
+mm_min_epi16(_Dst,_Src) -> ?nif_stub().
+mm_min_epu8(_Dst,_Src) -> ?nif_stub().
 
-mm_addsub_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hadd_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hsub_ps(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_mulhi_epu16(_Dst,_Src) -> ?nif_stub().
+mm_shufflehi_epi16(_Dst,_Src,_Imm8) -> ?nif_stub().
+mm_shufflelo_epi16(_Dst,_Src,_Imm8) -> ?nif_stub().
+mm_shuffle_epi32(_Dst,_Src,_Imm8) -> ?nif_stub().
 
-
-mm_addsub_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hadd_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hsub_pd(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-
-
-mm_hadd_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hadd_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hadds_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-
-
-mm_hsub_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hsub_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_hsubs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-
-
-mm_maddubs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-mm_mulhrs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-mm_shuffle_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-
-mm_sign_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sign_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_sign_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_avg_epu8(_Dst,_Src) -> ?nif_stub().
+mm_avg_epu16(_Dst,_Src) -> ?nif_stub().
+mm_sad_epu8(_Dst,_Src) -> ?nif_stub().
 
 
 
 
 
-mm_abs_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_abs_epi16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_abs_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_addsub_ps(_Dst,_Src) -> ?nif_stub().
+mm_hadd_ps(_Dst,_Src) -> ?nif_stub().
+mm_hsub_ps(_Dst,_Src) -> ?nif_stub().
+
+
+mm_addsub_pd(_Dst,_Src) -> ?nif_stub().
+mm_hadd_pd(_Dst,_Src) -> ?nif_stub().
+mm_hsub_pd(_Dst,_Src) -> ?nif_stub().
 
 
 
-mm_min_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_epi8(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_epu16(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_min_epu32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_max_epu32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mullo_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_mul_epi32(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_testz_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_testc_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_testnzc_si128(_Dst,_Src) -> erlang:error(nif_not_loaded).
+mm_hadd_epi16(_Dst,_Src) -> ?nif_stub().
+mm_hadd_epi32(_Dst,_Src) -> ?nif_stub().
+mm_hadds_epi16(_Dst,_Src) -> ?nif_stub().
 
 
-mm_move(_Dst,_Src) -> erlang:error(nif_not_loaded).
-mm_set(_Dst,_Data) -> erlang:error(nif_not_loaded).
-mm_load(_Dst,_Offset,_Data) -> erlang:error(nif_not_loaded).
-mm_get(_Src) -> erlang:error(nif_not_loaded).
+
+mm_hsub_epi16(_Dst,_Src) -> ?nif_stub().
+mm_hsub_epi32(_Dst,_Src) -> ?nif_stub().
+mm_hsubs_epi16(_Dst,_Src) -> ?nif_stub().
+
+
+
+mm_maddubs_epi16(_Dst,_Src) -> ?nif_stub().
+
+mm_mulhrs_epi16(_Dst,_Src) -> ?nif_stub().
+
+mm_shuffle_epi8(_Dst,_Src) -> ?nif_stub().
+
+mm_sign_epi8(_Dst,_Src) -> ?nif_stub().
+mm_sign_epi16(_Dst,_Src) -> ?nif_stub().
+mm_sign_epi32(_Dst,_Src) -> ?nif_stub().
+
+
+
+
+
+mm_abs_epi8(_Dst,_Src) -> ?nif_stub().
+mm_abs_epi16(_Dst,_Src) -> ?nif_stub().
+mm_abs_epi32(_Dst,_Src) -> ?nif_stub().
+
+
+
+mm_min_epi8(_Dst,_Src) -> ?nif_stub().
+mm_max_epi8(_Dst,_Src) -> ?nif_stub().
+mm_min_epu16(_Dst,_Src) -> ?nif_stub().
+mm_max_epu16(_Dst,_Src) -> ?nif_stub().
+mm_min_epi32(_Dst,_Src) -> ?nif_stub().
+mm_max_epi32(_Dst,_Src) -> ?nif_stub().
+mm_min_epu32(_Dst,_Src) -> ?nif_stub().
+mm_max_epu32(_Dst,_Src) -> ?nif_stub().
+mm_mullo_epi32(_Dst,_Src) -> ?nif_stub().
+mm_mul_epi32(_Dst,_Src) -> ?nif_stub().
+mm_testz_si128(_Dst,_Src) -> ?nif_stub().
+mm_testc_si128(_Dst,_Src) -> ?nif_stub().
+mm_testnzc_si128(_Dst,_Src) -> ?nif_stub().
+
+
+mm_move(_Dst,_Src) -> ?nif_stub().
+mm_set(_Dst,_Data) -> ?nif_stub().
+mm_load(_Dst,_Offset,_Data) -> ?nif_stub().
+mm_get(_Src) -> ?nif_stub().
 
 %% fixme: tuple?
 mm_read(u8, Src) -> [ X || <<X:8/native>> <= mm_get(Src)];
@@ -709,6 +714,7 @@ mm_write(i16, Dst, Xs) -> mm_set(Dst, << <<X:16/signed-native>> || X <- Xs >>);
 mm_write(i32, Dst, Xs) -> mm_set(Dst, << <<X:32/signed-native>> || X <- Xs >>);
 mm_write(i64, Dst, Xs) -> mm_set(Dst, << <<X:64/signed-native>> || X <- Xs >>);
 mm_write(ss, Dst, Xs) -> mm_set(Dst, << <<X:32/float-native>> || X <- Xs >>);
+mm_write(ps, Dst, Xs) -> mm_set(Dst, << <<X:32/float-native>> || X <- Xs >>);
 mm_write(pd, Dst, Xs) -> mm_set(Dst, << <<X:64/float-native>> || X <- Xs >>).
 
-info(_Info) -> erlang:error(nif_not_loaded).
+info(_Info) -> ?nif_stub().

@@ -84,6 +84,40 @@
 #define	CPUID2_CX16	0x00002000
 #define	CPUID2_XTPR	0x00004000
 
+/* FUNCTION 7, ecx=0 */
+/* EBX */
+#define CPUID_FSGSBASE  0x00000001
+#define CPUID_SGX       0x00000004
+#define CPUID_BMI1      0x00000008
+#define CPUID_HLE       0x00000010
+#define CPUID_AVX2      0x00000020
+#define CPUID_SMEP      0x00000080
+#define CPUID_bmi2
+#define CPUID_erms
+#define CPUID_invpcid
+#define CPUID_rtm
+#define CPUID_pqm
+#define CPUID_mpx
+#define CPUID_pqe
+#define CPUID_avx512f
+#define CPUID_avx512dq
+#define CPUID_rdseed
+#define CPUID_adx
+#define CPUID_smap
+#define CPUID_avx512ifma
+#define CPUID_pcommit
+#define CPUID_clflushopt
+#define CPUID_clwb
+#define CPUID_intel_pt
+#define CPUID_avx512pf
+#define CPUID_avx512er
+#define CPUID_avx512cd
+#define CPUID_sha       0x2000000    // Intel SHA extensions
+#define CPUID_avx512bw  0x40000000   // AVX-512 Byte and Word Instructions
+#define CPUID_avx512vl  0x80000000   // AVX-512 Vector Length Extensions
+
+
+
 #define	AMDID_SYSCALL	0x00000800
 #define	AMDID_MP	0x00080000
 #define	AMDID_NX	0x00100000
